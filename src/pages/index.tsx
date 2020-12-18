@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import Head from 'next/head';
 
 import Base from '@/components/base';

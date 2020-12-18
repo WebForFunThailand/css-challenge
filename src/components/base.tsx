@@ -1,8 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
+import { FunctionComponent } from 'react';
 
-const Title: React.FC = () => (
+const Title: FunctionComponent = () => (
   <div>
     <p
       css={css`
@@ -11,7 +12,6 @@ const Title: React.FC = () => (
     >
       Base Component
     </p>
-    <p></p>
   </div>
 );
 
