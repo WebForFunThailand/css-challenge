@@ -1,4 +1,3 @@
-// import React from 'react';
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
@@ -12,6 +11,7 @@ const Title: React.FC = () => (
     >
       Base Component
     </p>
+    <p></p>
   </div>
 );
 

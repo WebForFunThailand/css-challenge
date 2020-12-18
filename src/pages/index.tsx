@@ -1,9 +1,9 @@
-import React from 'react';
+import { FunctionComponent } from 'react';
 import Head from 'next/head';
 
 import Base from '@/components/base';
 
-const Home: React.FC = () => (
+const Home: FunctionComponent = () => (
   <div className="container">
     <Head>
       <title>Create Next App</title>
