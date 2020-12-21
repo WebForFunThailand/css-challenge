@@ -6,6 +6,7 @@ import { jsx } from '@emotion/react';
 import { MainLayout } from '@/layouts/MainLayout';
 import dynamic from 'next/dynamic';
 import useDomToImage from '@/hooks/useDomToImage';
+import Timer from '@/components/Timer';
 import {
   EditorLayout,
   ExpectedResultSection,
@@ -65,6 +66,10 @@ const Challenge = () => {
     userCss,
   ]);
 
+  // Timer
+  const isTimerPause = false;
+  const MAX_TIME = 60 * 10;
+
   return (
     <MainLayout>
       <div className="container">
@@ -73,6 +78,7 @@ const Challenge = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main>
+          <Timer isTimerPause={isTimerPause} maxTime={MAX_TIME} />
           <section css={EditorLayout}>
             <div css={ExpectedResultSection}>
               <span>Expected Result</span>
