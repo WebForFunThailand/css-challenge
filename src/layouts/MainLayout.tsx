@@ -3,8 +3,7 @@
 import React, { FunctionComponent } from 'react';
 import { jsx, css } from '@emotion/react';
 
-const logo =
-  'https://webforfun.dev/static/40ea6582af50f3afb237931d3dd76e72/47203/logo.webp';
+const logo = `https://webforfun.dev/static/40ea6582af50f3afb237931d3dd76e72/47203/logo.webp`;
 
 // style
 
@@ -53,33 +52,31 @@ const childrenStyle = css`
   min-height: 85vh;
 `;
 
-export const MainLayout: FunctionComponent = ({ children }) => {
-  return (
-    <>
-      <div css={container}>
-        <div css={sideBarStyle}>
-          <img src={logo} css={imageStyle} />
-          <div css={titleStyle}>
-            <p css={resetMargin}>#10mins</p>
-            <p css={resetMargin}>CSSChallenge</p>
-          </div>
-          <div css={linkStyle}>
-            <a href="https://webforfun.dev/">Web For Fun #2</a>
-            <a href="#">DEV.to Article</a>
-            <a href="https://github.com/WebForFunThailand/css-challenge">
-              Github Repository
-            </a>
-          </div>
+export const MainLayout: FunctionComponent = ({ children }) => (
+  <>
+    <div css={container}>
+      <div css={sideBarStyle}>
+        <img src={logo} css={imageStyle} alt="Web For Fun" />
+        <div css={titleStyle}>
+          <p css={resetMargin}>#10mins</p>
+          <p css={resetMargin}>CSSChallenge</p>
         </div>
-        <div
-          css={css`
-            width: auto;
-          `}
-        >
-          <div css={childrenStyle}>{children}</div>
-          <footer css={footerStyle}>Copyright © 2020 Web For Fun</footer>
+        <div css={linkStyle}>
+          <a href="https://webforfun.dev/">Web For Fun #2</a>
+          <a href="https://webforfun.dev/">DEV.to Article</a>
+          <a href="https://github.com/WebForFunThailand/css-challenge">
+            Github Repository
+          </a>
         </div>
       </div>
-    </>
-  );
-};
+      <div
+        css={css`
+          width: auto;
+        `}
+      >
+        <div css={childrenStyle}>{children}</div>
+        <footer css={footerStyle}>Copyright © 2020 Web For Fun</footer>
+      </div>
+    </div>
+  </>
+);

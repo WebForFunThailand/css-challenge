@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Head from 'next/head';
 
-import Base from '../components/Base';
+import Base from '../components/-Base';
 
 const Summary: FunctionComponent = () => (
   <div className="container">

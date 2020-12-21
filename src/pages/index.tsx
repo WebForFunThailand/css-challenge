@@ -53,7 +53,9 @@ const Home: FunctionComponent = () => (
             Recommended playing this game on a computer device
           </p>
         </div>
-        <button css={challengeButtonStyle}>PLAY THE CHALLENGE</button>
+        <button css={challengeButtonStyle} type="button">
+          PLAY THE CHALLENGE
+        </button>
       </main>
     </div>
   </MainLayout>
