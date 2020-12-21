@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Head from 'next/head';
 
-import Base from '@/components/base';
+import Base from '../components/Base';
 
 const Challenge: FunctionComponent = () => (
   <div className="container">
