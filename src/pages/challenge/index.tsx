@@ -7,6 +7,7 @@ import { MainLayout } from '@/layouts/MainLayout';
 import dynamic from 'next/dynamic';
 import useDomToImage from '@/hooks/useDomToImage';
 import Timer from '@/components/Timer';
+import Stepper, { StepperDataInterface } from '@/components/Stepper';
 import {
   EditorLayout,
   ExpectedResultSection,
@@ -70,6 +71,17 @@ const Challenge = () => {
   const isTimerPause = false;
   const MAX_TIME = 60 * 10;
 
+  // Stepper
+  const EXAMPLE_STEP: StepperDataInterface[] = [
+    { status: `done` },
+    { status: `skip` },
+    { status: `done` },
+    { status: `idle` },
+    { status: `idle` },
+    { status: `idle` },
+    { status: `idle` },
+  ];
+
   return (
     <MainLayout>
       <div className="container">
@@ -79,6 +91,7 @@ const Challenge = () => {
         </Head>
         <main>
           <Timer isTimerPause={isTimerPause} maxTime={MAX_TIME} />
+          <Stepper data={EXAMPLE_STEP} />
           <section css={EditorLayout}>
             <div css={ExpectedResultSection}>
               <span>Expected Result</span>
