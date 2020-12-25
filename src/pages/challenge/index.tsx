@@ -28,7 +28,7 @@ const sanitizeCss = (rawCssString: string) =>
   // Algorithm
   // 1. Make it a long string without newline
   // 2. Split up '}'
-  // 3. Check if the string is empty or not
+  // 3. Check if the string has a text or not
   //    - If true: Append safe element to it
   //    - If not: Do nothing
   // 4. Join them up
@@ -37,7 +37,8 @@ const sanitizeCss = (rawCssString: string) =>
     .join(``)
     .split(`}`)
     .map((e) => (e.trim().length ? `.userDivElement>${e}` : e))
-    .join(`}`);
+    .join(`}`)
+    .replace(/url\(.*?\)/g, `url()`);
 
 const renderExampleCanvas = () => {
   const c = document.getElementById(`expectedCanvas`) as HTMLCanvasElement;
