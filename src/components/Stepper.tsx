@@ -49,12 +49,8 @@ const StepperNode = css`
 const statusStyle = {
   idle: css``,
   skip: css`
-    background: #ee1466;
-    background-image: url("data:image/svg+xml,%3Csvg fill='white' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z' clip-rule='evenodd'%3E%3C/path%3E%3Cpath fill-rule='evenodd' d='M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z' clip-rule='evenodd'%3E%3C/path%3E%3C/svg%3E");
-    background-size: 65%;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    font-size: 0;
+    color: #777;
+    background: #eee;
   `,
   done: css`
     background: #23c274;
