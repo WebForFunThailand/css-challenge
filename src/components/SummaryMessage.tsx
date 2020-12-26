@@ -3,7 +3,7 @@
 import { jsx, css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FunctionComponent } from 'react';
-import { baseButtonStyle, submitButtonStyle } from '../pages/challenge/styled';
+import { baseButtonStyle, submitButtonStyle } from './button';
 
 interface ISummaryMessageProps {
   percentage: number;
