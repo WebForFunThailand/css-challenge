@@ -63,13 +63,13 @@ const Challenge = () => {
 
   // Stepper
   const EXAMPLE_STEP: StepperDataInterface[] = [
-    { status: `done` },
-    { status: `skip` },
-    { status: `done` },
-    { status: `idle` },
-    { status: `idle` },
-    { status: `idle` },
-    { status: `idle` },
+    { id: 1, status: `done` },
+    { id: 2, status: `skip` },
+    { id: 3, status: `done` },
+    { id: 4, status: `idle` },
+    { id: 5, status: `idle` },
+    { id: 6, status: `idle` },
+    { id: 7, status: `idle` },
   ];
 
   return (
