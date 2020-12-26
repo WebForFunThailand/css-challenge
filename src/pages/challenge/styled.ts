@@ -50,7 +50,7 @@ export const UserResultSection = css`
     > .userDivElement {
       width: 500px;
       height: 500px;
-      background: white;
+      background: #f1f1f1;
       display: inline-block;
     }
   }
