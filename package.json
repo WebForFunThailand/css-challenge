@@ -16,20 +16,8 @@
     "start": "next start",
     "type-check": "tsc",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
-    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write"
-  },
-  "husky": {
-    "hooks": {
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "./src/**/*.{ts,js,jsx,tsx}": [
-      "yarn lint --fix",
-      "yarn format"
-    ]
+    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write",
+    "export": "next export"
   },
   "dependencies": {
     "@babel/core": "7.12.10",
@@ -39,8 +27,13 @@
     "@emotion/core": "11.0.0",
     "@emotion/react": "11.1.2",
     "@emotion/styled": "11.0.0",
+    "@use-it/interval": "1.0.0",
+    "ace-builds": "1.4.12",
+    "dom-to-image": "2.6.0",
     "next": "10.0.3",
+    "pixelmatch": "5.2.1",
     "react": "17.0.1",
+    "react-ace": "9.2.1",
     "react-dom": "17.0.1"
   },
   "devDependencies": {
