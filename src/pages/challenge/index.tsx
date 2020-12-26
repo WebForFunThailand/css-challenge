@@ -1,6 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useEffect, useRef, useState } from 'react';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { jsx } from '@emotion/react';
 import { MainLayout } from '@/layouts/MainLayout';
@@ -45,7 +46,22 @@ const sanitizeCss = (rawCssString: string) =>
     .join(`}`)
     .replace(/url\(.*?\)/g, `url()`);
 
-const Challenge = () => {
+// Timer
+const isTimerPause = false;
+const MAX_TIME = 60 * 10;
+
+// Stepper
+const EXAMPLE_STEP: StepperDataInterface[] = [
+  { id: 1, status: `done` },
+  { id: 2, status: `skip` },
+  { id: 3, status: `done` },
+  { id: 4, status: `idle` },
+  { id: 5, status: `idle` },
+  { id: 6, status: `idle` },
+  { id: 7, status: `idle` },
+];
+
+const Challenge: NextPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [questionHtml, setQuestionHtml] = useState(
     `<!-- view only -->\n<div class='question1'></div>`,
@@ -62,26 +78,14 @@ const Challenge = () => {
     userCss,
   ]);
 
-  // Timer
-  const isTimerPause = false;
-  const MAX_TIME = 60 * 10;
-
-  // Stepper
-  const EXAMPLE_STEP: StepperDataInterface[] = [
-    { id: 1, status: `done` },
-    { id: 2, status: `skip` },
-    { id: 3, status: `done` },
-    { id: 4, status: `idle` },
-    { id: 5, status: `idle` },
-    { id: 6, status: `idle` },
-    { id: 7, status: `idle` },
-  ];
-
   // Diff
   const DIMENSION = 500;
+
   const TOTAL_PIXEL = DIMENSION * DIMENSION;
+
   const roundTo2Decimals = (num) =>
     Math.round((num + Number.EPSILON) * 100) / 100;
+
   const diffImage = () => {
     // Draw Expected
     const expectedCanvas = document.createElement(`canvas`);
