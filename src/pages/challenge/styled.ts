@@ -61,34 +61,3 @@ export const ActionSection = css`
     margin-left: 1rem;
   }
 `;
-
-export const baseButtonStyle = css`
-  cursor: pointer;
-  padding: 15px 40px;
-  border-radius: 7px;
-  border-width: 0;
-  display: inline-block;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 23px;
-  text-align: center;
-  text-transform: uppercase;
-`;
-
-export const skipButtonStyle = css`
-  color: rgb(237, 20, 102);
-  background: transparent;
-
-  &:hover {
-    background: rgba(237, 20, 102, 0.1);
-  }
-`;
-
-export const submitButtonStyle = css`
-  color: rgb(14, 104, 248);
-  background: rgba(14, 104, 248, 0.1);
-
-  &:hover {
-    background: rgba(14, 104, 248, 0.2);
-  }
-`;

@@ -16,10 +16,12 @@ import {
   HtmlEditorSection,
   CssEditorSection,
   ActionSection,
+} from './styled';
+import {
   baseButtonStyle,
   skipButtonStyle,
   submitButtonStyle,
-} from './styled';
+} from '@/components/button';
 
 const Editor = dynamic(() => import(`@/components/Editor`), {
   ssr: false,
