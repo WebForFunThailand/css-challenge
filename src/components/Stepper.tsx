@@ -5,6 +5,7 @@ import { stat } from 'fs';
 import { FunctionComponent } from 'react';
 
 export interface StepperDataInterface {
+  id: number;
   status: `idle` | 'skip' | 'done';
 }
 
@@ -16,8 +17,7 @@ const StepperContainer = css`
   display: flex;
   justify-content: space-between;
   position: relative;
-  z-index: -1;
-  margin-bottom: 48px;
+  margin-bottom: 50px;
 
   &::before {
     content: '';
@@ -34,11 +34,11 @@ const StepperNode = css`
   text-align: center;
   background: #dbe8fe;
   font-weight: bold;
-  font-size: 25px;
+  font-size: 1.4rem;
   color: #0e68f8;
   padding: 1rem;
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -49,7 +49,7 @@ const StepperNode = css`
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const statusStyle = {
-  idle: css``,
+  current: css``,
   skip: css`
     color: #777;
     background: #eee;
@@ -66,8 +66,8 @@ const statusStyle = {
 
 const Stepper: FunctionComponent<StepperProps> = ({ data }) => (
   <div css={StepperContainer}>
-    {data.map(({ status }, index) => (
-      <div css={[StepperNode, statusStyle[status]]} key={`${index}-${status}`}>
+    {data.map(({ status, id }, index) => (
+      <div css={[StepperNode, statusStyle[status]]} key={`${id}-${status}`}>
         {index + 1}
       </div>
     ))}

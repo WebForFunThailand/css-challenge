@@ -16,10 +16,12 @@ import {
   HtmlEditorSection,
   CssEditorSection,
   ActionSection,
+} from './styled';
+import {
   baseButtonStyle,
   skipButtonStyle,
   submitButtonStyle,
-} from './styled';
+} from '@/components/button';
 
 const Editor = dynamic(() => import(`@/components/Editor`), {
   ssr: false,
@@ -63,18 +65,18 @@ const Challenge = () => {
 
   // Stepper
   const EXAMPLE_STEP: StepperDataInterface[] = [
-    { status: `done` },
-    { status: `skip` },
-    { status: `done` },
-    { status: `idle` },
-    { status: `idle` },
-    { status: `idle` },
-    { status: `idle` },
+    { id: 1, status: `done` },
+    { id: 2, status: `skip` },
+    { id: 3, status: `done` },
+    { id: 4, status: `idle` },
+    { id: 5, status: `idle` },
+    { id: 6, status: `idle` },
+    { id: 7, status: `idle` },
   ];
 
   return (
     <MainLayout>
-      <div className="container">
+      <div>
         <Head>
           <title>Challenge</title>
           <link rel="icon" href="/favicon.ico" />
@@ -98,7 +100,10 @@ const Challenge = () => {
                 alt="Your result"
               />
               {/* rendering area */}
-              <style>{sanitizeCss(userCss)}</style>
+              <style
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: sanitizeCss(userCss) }}
+              />
               <div className="userDivContainer">
                 <div
                   className="userDivElement"

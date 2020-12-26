@@ -11,7 +11,7 @@ const container = css`
   display: grid;
   margin-left: 40px;
   margin-top: 40px;
-  grid-template-columns: 25% 60% auto;
+  grid-template-columns: 25% 800px;
 `;
 
 const imageStyle = css`

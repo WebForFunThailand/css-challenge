@@ -2,10 +2,8 @@ import { css } from '@emotion/react';
 
 export const EditorLayout = css`
   display: grid;
+  grid-gap: 10px;
   grid-template-areas: 'expect user' 'html css';
-  grid-gap: 8px;
-  margin: auto;
-  width: calc(50vw + 8px);
 `;
 
 export const DisplaySection = css`
@@ -19,8 +17,8 @@ export const DisplaySection = css`
 
   > img {
     display: block;
-    width: 25vw;
-    height: 25vw;
+    width: calc(400px - 10px / 2);
+    height: calc(400px - 10px / 2);
     border: 1px #777 solid;
     user-select: none;
   }
@@ -61,36 +59,5 @@ export const ActionSection = css`
 
   > button:last-of-type {
     margin-left: 1rem;
-  }
-`;
-
-export const baseButtonStyle = css`
-  cursor: pointer;
-  padding: 15px 40px;
-  border-radius: 7px;
-  border-width: 0;
-  display: inline-block;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 23px;
-  text-align: center;
-  text-transform: uppercase;
-`;
-
-export const skipButtonStyle = css`
-  color: rgb(237, 20, 102);
-  background: transparent;
-
-  &:hover {
-    background: rgba(237, 20, 102, 0.1);
-  }
-`;
-
-export const submitButtonStyle = css`
-  color: rgb(14, 104, 248);
-  background: rgba(14, 104, 248, 0.1);
-
-  &:hover {
-    background: rgba(14, 104, 248, 0.2);
   }
 `;
