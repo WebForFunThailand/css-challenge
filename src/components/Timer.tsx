@@ -1,6 +1,12 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { CSSProperties, useMemo, useState, FunctionComponent } from 'react';
+import {
+  CSSProperties,
+  useMemo,
+  useState,
+  FunctionComponent,
+  useEffect,
+} from 'react';
 import { jsx, css } from '@emotion/react';
 import useInterval from '@use-it/interval';
 
@@ -51,16 +57,16 @@ interface TimerProps {
 
 const Timer: FunctionComponent<TimerProps> = ({ isTimerPause, maxTime }) => {
   const [time, setTime] = useState(0);
-
+  const [formattedTime, setFormattedTime] = useState(``);
   useInterval(
     () => setTime((currentTime) => currentTime + 1),
     isTimerPause ? null : 1000,
   );
 
-  const formattedTime = useMemo(() => {
+  useEffect(() => {
     const second = time % 60;
     const minute = (time - second) / 60;
-    return `${minute}:${second < 10 ? `0` : ``}${second}`;
+    setFormattedTime(`${minute}:${second < 10 ? `0` : ``}${second}`);
   }, [time]);
 
   return (
