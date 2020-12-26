@@ -29,6 +29,7 @@ const challengeButtonStyle = css`
   margin: 5% auto;
   display: block;
 `;
+
 const Home: NextPage = () => {
   const router = useRouter();
 

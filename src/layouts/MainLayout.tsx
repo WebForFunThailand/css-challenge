@@ -8,12 +8,10 @@ const logo = `https://webforfun.dev/static/40ea6582af50f3afb237931d3dd76e72/4720
 // style
 
 const container = css`
-  display: flex;
+  display: grid;
   margin-left: 40px;
   margin-top: 40px;
-`;
-const sideBarStyle = css`
-  width: 25%;
+  grid-template-columns: 25% 60% auto;
 `;
 
 const imageStyle = css`
@@ -55,7 +53,7 @@ const childrenStyle = css`
 export const MainLayout: FunctionComponent = ({ children }) => (
   <>
     <div css={container}>
-      <div css={sideBarStyle}>
+      <div>
         <img src={logo} css={imageStyle} alt="Web For Fun" />
         <div css={titleStyle}>
           <p css={resetMargin}>#10mins</p>
@@ -69,11 +67,7 @@ export const MainLayout: FunctionComponent = ({ children }) => (
           </a>
         </div>
       </div>
-      <div
-        css={css`
-          width: auto;
-        `}
-      >
+      <div>
         <div css={childrenStyle}>{children}</div>
         <footer css={footerStyle}>Copyright © 2020 Web For Fun</footer>
       </div>

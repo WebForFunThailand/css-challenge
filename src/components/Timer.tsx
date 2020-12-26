@@ -1,12 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import {
-  CSSProperties,
-  useMemo,
-  useState,
-  FunctionComponent,
-  useEffect,
-} from 'react';
+import { CSSProperties, useState, FunctionComponent, useEffect } from 'react';
 import { jsx, css } from '@emotion/react';
 import useInterval from '@use-it/interval';
 
