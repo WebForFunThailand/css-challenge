@@ -19,7 +19,7 @@ const imageStyle = css`
 
 const containerStyle = css`
   margin: 40px auto;
-  width: 100%;
+  width: 80vw;
 `;
 
 const childrenStyle = css`
@@ -37,7 +37,6 @@ export const MobileLayout: FunctionComponent = ({ children }) => (
   <div css={containerStyle}>
     <img src={logo} css={imageStyle} alt="Web For Fun" />
     <div css={childrenStyle}>{children}</div>
-
     <footer css={footerStyle}>Copyright © 2020 Web For Fun</footer>
   </div>
 );

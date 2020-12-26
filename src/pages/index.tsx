@@ -12,6 +12,7 @@ import { Header } from '../components/Header';
 import { baseButtonStyle, challengeButtonStyle } from '../components/button';
 
 const IPAD_PRO_WIDTH = 1366;
+
 // style
 const subTtitleStyle = css`
   color: #555555;
@@ -72,7 +73,7 @@ const Home: NextPage = () => {
               margin-top: 1em;
               text-align: center;
               color: #ff0000;
-              font-size: 16px;
+              font-size: 1.5em;
             `}
           >
             เกมนี้ไม่รองรับการเล่นบนโทรศัพท์มือถือโปรดเปิดเล่นบนคอมพิวเตอร์
@@ -86,7 +87,7 @@ const Home: NextPage = () => {
     <MainLayout>
       <div className="container">
         <Head>
-          <title>Create Next App</title>
+          <title>Web for fun #2</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
