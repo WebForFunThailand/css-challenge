@@ -15,12 +15,19 @@ const container = css`
 `;
 
 const imageStyle = css`
-  width: 200px;
+  width: 120px;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const titleStyle = css`
   color: #555555;
-  font-size: 20px;
+  font-size: 1.2rem;
   margin: 20px 0;
 `;
 
@@ -30,7 +37,8 @@ const resetMargin = css`
 `;
 
 const linkStyle = css`
-  font-size: 20px;
+  font-size: 1.2rem;
+
   & > a {
     color: rgba(14, 104, 248, 1);
     display: block;
@@ -54,15 +62,25 @@ export const MainLayout: FunctionComponent = ({ children }) => (
   <>
     <div css={container}>
       <div>
-        <img src={logo} css={imageStyle} alt="Web For Fun" />
+        <a href="https://webforfun.dev" rel="noreferrer" target="_blank">
+          <img src={logo} css={imageStyle} alt="Web For Fun" />
+        </a>
         <div css={titleStyle}>
           <p css={resetMargin}>#10mins</p>
           <p css={resetMargin}>CSSChallenge</p>
         </div>
         <div css={linkStyle}>
-          <a href="https://webforfun.dev/">Web For Fun #2</a>
-          <a href="https://webforfun.dev/">DEV.to Article</a>
-          <a href="https://github.com/WebForFunThailand/css-challenge">
+          <a target="_blank" rel="noreferrer" href="https://webforfun.dev/">
+            Web For Fun #2
+          </a>
+          <a target="_blank" rel="noreferrer" href="https://webforfun.dev/">
+            DEV.to Article
+          </a>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://github.com/WebForFunThailand/css-challenge"
+          >
             Github Repository
           </a>
         </div>

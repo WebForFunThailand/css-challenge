@@ -1,6 +1,5 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { FunctionComponent } from 'react';
 import Head from 'next/head';
 import { jsx, css } from '@emotion/react';
 import { useRouter } from 'next/router';
