@@ -74,7 +74,7 @@ const Challenge = () => {
 
   return (
     <MainLayout>
-      <div className="container">
+      <div>
         <Head>
           <title>Challenge</title>
           <link rel="icon" href="/favicon.ico" />
