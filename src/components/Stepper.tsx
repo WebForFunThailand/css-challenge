@@ -37,8 +37,8 @@ const StepperNode = css`
   font-size: 1.4rem;
   color: #0e68f8;
   padding: 1rem;
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;

@@ -21,6 +21,7 @@ import {
   HtmlEditorSection,
   CssEditorSection,
   ActionSection,
+  EditorContainer,
 } from './styled';
 
 const Editor = dynamic(() => import(`@/components/Editor`), {
@@ -46,7 +47,7 @@ const sanitizeCss = (rawCssString: string) =>
 const Challenge = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [questionHtml, setQuestionHtml] = useState(
-    `<div class='question1'></div>`,
+    `<!-- view only -->\n<div class='question1'></div>`,
   );
   const [userCss, setUserCss] = useState(
     `.question1 {\n    /* Enter Your CSS Here */\n}`,
@@ -113,23 +114,29 @@ const Challenge = () => {
                 />
               </div>
             </div>
+          </section>
+          <div css={EditorContainer}>
             <section css={HtmlEditorSection}>
               <Editor
                 mode="html"
+                theme="nord_dark"
                 name="htmlEditor"
                 defaultValue={questionHtml}
+                width="300px"
                 readOnly
               />
             </section>
             <section css={CssEditorSection}>
               <Editor
                 mode="css"
+                theme="dracula"
                 name="cssEditor"
+                width="500px"
                 defaultValue={userCss}
                 onChange={setUserCss}
               />
             </section>
-          </section>
+          </div>
           <section css={ActionSection}>
             <button css={[baseButtonStyle, skipButtonStyle]} type="button">
               Skip

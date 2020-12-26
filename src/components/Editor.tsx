@@ -2,7 +2,8 @@ import React, { FunctionComponent } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-html';
 import 'ace-builds/src-noconflict/mode-css';
-import 'ace-builds/src-noconflict/theme-tomorrow';
+import 'ace-builds/src-noconflict/theme-nord_dark';
+import 'ace-builds/src-noconflict/theme-dracula';
 import 'ace-builds/src-noconflict/ext-language_tools';
 
 interface EditorProps {
@@ -11,6 +12,8 @@ interface EditorProps {
   defaultValue?: string;
   readOnly?: boolean;
   onChange?: (value: string, event?: any) => void;
+  width: string;
+  theme: string;
 }
 
 const Editor: FunctionComponent<EditorProps> = ({
@@ -19,11 +22,13 @@ const Editor: FunctionComponent<EditorProps> = ({
   onChange,
   readOnly,
   defaultValue,
+  width,
+  theme,
 }) => (
   <AceEditor
     {...{ mode, name, onChange, readOnly, defaultValue }}
-    theme="tomorrow"
-    fontSize={14}
+    theme={theme}
+    fontSize={16}
     showPrintMargin
     showGutter
     highlightActiveLine
@@ -33,11 +38,9 @@ const Editor: FunctionComponent<EditorProps> = ({
       showLineNumbers: true,
     }}
     style={{
-      width: `100%`,
+      width,
       display: `block`,
-      maxWidth: `25vw`,
-      height: `25vw`,
-      border: `1px #777 solid`,
+      height: `400px`,
     }}
   />
 );
