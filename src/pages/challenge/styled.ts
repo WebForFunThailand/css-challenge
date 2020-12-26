@@ -1,9 +1,20 @@
 import { css } from '@emotion/react';
 
+export const EditorContainer = css`
+  display: flex;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-top: 15px;
+
+  & > section {
+    width: 100%;
+  }
+`;
+
 export const EditorLayout = css`
   display: grid;
   grid-gap: 10px;
-  grid-template-areas: 'expect user' 'html css';
+  grid-template-areas: 'expect user';
 `;
 
 export const DisplaySection = css`
@@ -19,7 +30,7 @@ export const DisplaySection = css`
     display: block;
     width: calc(400px - 10px / 2);
     height: calc(400px - 10px / 2);
-    border: 1px #777 solid;
+    background: #f1f1f1;
     user-select: none;
   }
 `;
@@ -46,11 +57,11 @@ export const UserResultSection = css`
 `;
 
 export const HtmlEditorSection = css`
-  grid-area: html;
+  width: 300px;
 `;
 
 export const CssEditorSection = css`
-  grid-area: css;
+  width: 500px;
 `;
 
 export const ActionSection = css`
