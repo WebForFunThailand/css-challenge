@@ -1,19 +1,24 @@
 import React, { FunctionComponent } from 'react';
 import Head from 'next/head';
-
-import Base from '../../components/Base';
+import MessageBox from '../../components/Message';
+import { MainLayout } from '../../layouts/MainLayout';
 
 const Summary: FunctionComponent = () => (
-  <div className="container">
-    <Head>
-      <title>Summary</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+  <MainLayout>
+    <div className="container">
+      <Head>
+        <title>Summary</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-    <main>
-      <Base />
-    </main>
-  </div>
+      <main>
+        <MessageBox
+          title="Web For Fun #2 is now open for registration!"
+          description="10 Minutes CSS Challenge is a game developed for the developer who has writing skills in CSS or interested in it. For this challenge, you’ll get an image and your job is to write CSS to be exactly same design as that image."
+        />
+      </main>
+    </div>
+  </MainLayout>
 );
 
 export default Summary;
