@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { MainLayout } from '@/layouts/MainLayout';
 import { Header } from '@/components/Header';
 import { NextPage } from 'next';
+import { useState, useEffect } from 'react';
 
 // style
 const subTtitleStyle = css`
