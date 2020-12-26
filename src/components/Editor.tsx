@@ -35,7 +35,7 @@ const Editor: FunctionComponent<EditorProps> = ({
     style={{
       width: `100%`,
       display: `block`,
-      minWidth: `25vw`,
+      maxWidth: `25vw`,
       height: `25vw`,
       border: `1px #777 solid`,
     }}
