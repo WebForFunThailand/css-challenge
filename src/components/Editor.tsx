@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-html';
 import 'ace-builds/src-noconflict/mode-css';
@@ -13,13 +13,13 @@ interface EditorProps {
   onChange?: (value: string, event?: any) => void;
 }
 
-const Editor = ({
+const Editor: FunctionComponent<EditorProps> = ({
   mode,
   name,
   onChange,
   readOnly,
   defaultValue,
-}: EditorProps) => (
+}) => (
   <AceEditor
     {...{ mode, name, onChange, readOnly, defaultValue }}
     theme="tomorrow"

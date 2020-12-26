@@ -1,6 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
+import { FunctionComponent } from 'react';
 
 export interface StepperDataInterface {
   status: `idle` | 'skip' | 'done';
@@ -62,7 +63,7 @@ const statusStyle = {
   `,
 };
 
-const Stepper = ({ data }: StepperProps) => (
+const Stepper: FunctionComponent<StepperProps> = ({ data }) => (
   <div css={StepperContainer}>
     {data.map(({ status }, index) => (
       <div css={[StepperNode, statusStyle[status]]}>{index + 1}</div>
