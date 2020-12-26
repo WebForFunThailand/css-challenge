@@ -1,15 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import Head from 'next/head';
 import MessageBox from '../../components/Message';
 import SummaryMessageBox from '../../components/SummaryMessage';
 import { MainLayout } from '../../layouts/MainLayout';
 
 const graphStyle = css`
-  width: 450px;
-  height: 450px;
+  width: 800px;
+  height: 600px;
   display: block;
   margin: 0 auto;
 `;
@@ -25,6 +25,7 @@ const badgeLabelStyle = css`
   font-weight: 300;
   text-align: center;
 `;
+
 const Summary: FunctionComponent = () => (
   <MainLayout>
     <div className="container">
