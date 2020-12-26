@@ -66,9 +66,9 @@ export const CssEditorSection = css`
 
 export const ActionSection = css`
   text-align: right;
-  margin-top: 1rem;
+  margin-top: 15px;
 
   > button:last-of-type {
-    margin-left: 1rem;
+    margin-left: 10px;
   }
 `;
