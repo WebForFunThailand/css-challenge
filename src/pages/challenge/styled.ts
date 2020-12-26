@@ -2,10 +2,8 @@ import { css } from '@emotion/react';
 
 export const EditorLayout = css`
   display: grid;
+  grid-gap: 10px;
   grid-template-areas: 'expect user' 'html css';
-  grid-gap: 8px;
-  margin: auto;
-  width: calc(50vw + 8px);
 `;
 
 export const DisplaySection = css`
@@ -19,8 +17,8 @@ export const DisplaySection = css`
 
   > img {
     display: block;
-    width: 25vw;
-    height: 25vw;
+    width: calc(400px - 10px / 2);
+    height: calc(400px - 10px / 2);
     border: 1px #777 solid;
     user-select: none;
   }
