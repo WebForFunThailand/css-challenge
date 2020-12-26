@@ -3,7 +3,7 @@
 import { jsx, css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FunctionComponent } from 'react';
-import { baseButtonStyle, submitButtonStyle } from './button';
+import { baseButtonStyle, facebookButtonStyle } from './button';
 
 interface ISummaryMessageProps {
   percentage: number;
@@ -40,7 +40,7 @@ const SummaryMessageBox: FunctionComponent<ISummaryMessageProps> = ({
     </p>
 
     <button
-      css={[baseButtonStyle, submitButtonStyle, buttonStyle]}
+      css={[baseButtonStyle, facebookButtonStyle, buttonStyle]}
       type="button"
     >
       SHARE YOUR RESULT ON FACEBOOK
