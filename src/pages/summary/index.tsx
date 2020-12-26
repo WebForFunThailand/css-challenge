@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import Head from 'next/head';
 import MessageBox from '../../components/Message';
 import SummaryMessageBox from '../../components/SummaryMessage';
