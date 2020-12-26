@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { MainLayout } from '@/layouts/MainLayout';
 import { Header } from '@/components/Header';
-import { route } from 'next/dist/next-server/server/router';
+import { NextPage } from 'next';
 
 // style
 const subTtitleStyle = css`
@@ -29,7 +29,7 @@ const challengeButtonStyle = css`
   margin: 5% auto;
   display: block;
 `;
-const Home: FunctionComponent = () => {
+const Home: NextPage = () => {
   const router = useRouter();
 
   const onClickToChallenge = () => {
