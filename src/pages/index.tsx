@@ -6,7 +6,8 @@ import { useRouter } from 'next/router';
 import { MainLayout } from '@/layouts/MainLayout';
 import { Header } from '@/components/Header';
 import { NextPage } from 'next';
-import { useState, useEffect } from 'react';
+import { baseButtonStyle, challengeButtonStyle } from '@/components/button';
+import { center } from '@/components/style-helper';
 
 // style
 const subTtitleStyle = css`
@@ -14,19 +15,6 @@ const subTtitleStyle = css`
   width: 600px;
   margin: auto;
   font-size: 1.2rem;
-`;
-
-const challengeButtonStyle = css`
-  cursor: pointer;
-  background-color: rgba(246, 126, 4, 0.1);
-  color: rgb(246, 126, 4);
-  padding: 10px 60px;
-  border-radius: 7px;
-  border-width: 0;
-  margin: 5% auto;
-  display: block;
-  font-size: 1.2rem;
-  font-weight: bold;
 `;
 
 const Home: NextPage = () => {
@@ -65,13 +53,15 @@ const Home: NextPage = () => {
               Recommended playing this game on a computer device
             </p>
           </div>
-          <button
-            css={challengeButtonStyle}
-            type="button"
-            onClick={onClickToChallenge}
-          >
-            PLAY THE CHALLENGE
-          </button>
+          <div css={center}>
+            <button
+              css={[baseButtonStyle, challengeButtonStyle]}
+              type="button"
+              onClick={onClickToChallenge}
+            >
+              PLAY THE CHALLENGE
+            </button>
+          </div>
         </main>
       </div>
     </MainLayout>
