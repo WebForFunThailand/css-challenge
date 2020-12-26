@@ -11,6 +11,7 @@ const graphStyle = css`
   width: 800px;
   display: block;
   margin: 0 auto;
+  position: relative;
 `;
 
 const badgeStyle = css`
@@ -25,11 +26,22 @@ const badgeLabelStyle = css`
   text-align: center;
 `;
 
-const result = css`
+const resultPosition = css`
+  position: absolute;
+  top: 600px;
+  left: 500px;
+`;
+
+const circleResult = css`
   color: #ffffff;
   padding: 25px;
   border-radius: 95%;
   background-color: #1168f8;
+`;
+
+const textResult = css`
+  margin: 35px 0 0 0;
+  color: #1168f8;
 `;
 
 const Summary: FunctionComponent = () => (
@@ -48,7 +60,10 @@ const Summary: FunctionComponent = () => (
           You’re a <span css={badgeStyle}>CSS Wizard</span>
         </p>
         <img alt="graph" src="./graph.svg" css={graphStyle} />
-        <span css={result}>You</span>
+        <div css={resultPosition}>
+          <span css={circleResult}>You</span>
+          <p css={textResult}>8:10 minutes 88% avg accuracy</p>
+        </div>
         <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />
       </main>
     </div>
