@@ -22,6 +22,8 @@ const Summary: FunctionComponent = () => (
           description="10 Minutes CSS Challenge is a game developed for the developer who has writing skills in CSS or interested in it. For this challenge, you’ll get an image and your job is to write CSS to be exactly same design as that image."
         />
 
+        <img alt="graph" src="./graph.svg" />
+
         <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />
       </main>
     </div>
