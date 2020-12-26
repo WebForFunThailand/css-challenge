@@ -4,47 +4,17 @@ export const EditorLayout = css`
   display: grid;
   grid-template-areas: 'expect user' 'html css';
   grid-gap: 8px;
+  margin: auto;
+  width: calc(50vw + 8px);
 `;
 
-export const ExpectedResultSection = css`
-  grid-area: expect;
+export const DisplaySection = css`
   color: #777;
   font-weight: 500;
 
   > span {
     display: block;
     margin-bottom: 4px;
-  }
-
-  > #expectedCanvas {
-    display: block;
-    min-width: 25vw;
-    min-height: 25vw;
-    border: 1px #777 solid;
-  }
-`;
-
-export const UserResultSection = css`
-  grid-area: user;
-  color: #777;
-  font-weight: 500;
-  position: relative;
-
-  > span {
-    display: block;
-    margin-bottom: 4px;
-  }
-
-  > .userDivContainer {
-    position: absolute;
-    opacity: 0;
-
-    > .userDivElement {
-      width: 150px;
-      height: 150px;
-      background: white;
-      display: inline-block;
-    }
   }
 
   > img {
@@ -52,6 +22,28 @@ export const UserResultSection = css`
     width: 25vw;
     height: 25vw;
     border: 1px #777 solid;
+    user-select: none;
+  }
+`;
+
+export const ExpectedResultSection = css`
+  grid-area: expect;
+`;
+
+export const UserResultSection = css`
+  grid-area: user;
+  position: relative;
+
+  > .userDivContainer {
+    position: absolute;
+    transform: scale(0);
+
+    > .userDivElement {
+      width: 500px;
+      height: 500px;
+      background: white;
+      display: inline-block;
+    }
   }
 `;
 

@@ -11,6 +11,7 @@ import Stepper, { StepperDataInterface } from '@/components/Stepper';
 import {
   EditorLayout,
   ExpectedResultSection,
+  DisplaySection,
   UserResultSection,
   HtmlEditorSection,
   CssEditorSection,
@@ -40,15 +41,6 @@ const sanitizeCss = (rawCssString: string) =>
     .join(`}`)
     .replace(/url\(.*?\)/g, `url()`);
 
-const renderExampleCanvas = () => {
-  const c = document.getElementById(`expectedCanvas`) as HTMLCanvasElement;
-  const ctx = c.getContext(`2d`);
-  ctx.beginPath();
-  ctx.arc(75, 75, 50, 0, 2 * Math.PI);
-  ctx.fillStyle = `#FF4136`;
-  ctx.fill();
-};
-
 const Challenge = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [questionHtml, setQuestionHtml] = useState(
@@ -57,9 +49,6 @@ const Challenge = () => {
   const [userCss, setUserCss] = useState(
     `.question1 {\n    /* Enter Your CSS Here */\n}`,
   );
-
-  // Render Example Canvas
-  useEffect(() => renderExampleCanvas(), []);
 
   // Convert User Div into Canvas
   const userDiv = useRef(null);
@@ -94,11 +83,14 @@ const Challenge = () => {
           <Timer isTimerPause={isTimerPause} maxTime={MAX_TIME} />
           <Stepper data={EXAMPLE_STEP} />
           <section css={EditorLayout}>
-            <div css={ExpectedResultSection}>
+            <div css={[DisplaySection, ExpectedResultSection]}>
               <span>Expected Result</span>
-              <canvas id="expectedCanvas" width="150" height="150" />
+              <img
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                alt="Expected result"
+              />
             </div>
-            <div css={UserResultSection}>
+            <div css={[DisplaySection, UserResultSection]}>
               <span>Your Result</span>
               <img
                 ref={resultImage}
