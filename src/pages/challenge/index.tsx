@@ -24,7 +24,7 @@ import {
   CssEditorSection,
   ActionSection,
   EditorContainer,
-} from './styled';
+} from '../../components/style-helper';
 
 const Editor = dynamic(() => import(`@/components/Editor`), {
   ssr: false,
