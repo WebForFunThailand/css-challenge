@@ -11,11 +11,9 @@ import { useState, useEffect } from 'react';
 // style
 const subTtitleStyle = css`
   color: #555555;
-  text-align: center;
-  font-size: 20px;
-  width: 60%;
-  line-height: 30px;
+  width: 600px;
   margin: auto;
+  font-size: 1.2rem;
 `;
 
 const challengeButtonStyle = css`
@@ -25,9 +23,10 @@ const challengeButtonStyle = css`
   padding: 10px 60px;
   border-radius: 7px;
   border-width: 0;
-  font-size: 23px;
   margin: 5% auto;
   display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
 `;
 
 const Home: NextPage = () => {
@@ -48,15 +47,19 @@ const Home: NextPage = () => {
         <main>
           <Header />
           <div css={subTtitleStyle}>
-            <p>
-              10 Minutes CSS Challenge is a game developed for the developer who
-              has writing skills in CSS or interested in it. For this challenge,
-              you’ll get an image and your job is to write CSS to be exactly
-              same design as that image.
-            </p>
+            <div>
+              <br />
+              <iframe
+                width="100%"
+                height="315"
+                src="https://www.youtube.com/embed/_0s8qXRCY4Y"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              ></iframe>
+            </div>
             <p
               css={css`
                 margin-top: 1em;
+                text-align: center;
               `}
             >
               Recommended playing this game on a computer device

@@ -49,9 +49,9 @@ const linkStyle = css`
 
 const footerStyle = css`
   margin-top: 50px;
+  margin-bottom: 20px;
   text-align: center;
   color: #777777;
-  font-size: 18px;
 `;
 
 const childrenStyle = css`
