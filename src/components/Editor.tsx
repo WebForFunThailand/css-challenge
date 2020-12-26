@@ -28,7 +28,7 @@ const Editor: FunctionComponent<EditorProps> = ({
   <AceEditor
     {...{ mode, name, onChange, readOnly, defaultValue }}
     theme={theme}
-    fontSize={14}
+    fontSize={16}
     showPrintMargin
     showGutter
     highlightActiveLine
