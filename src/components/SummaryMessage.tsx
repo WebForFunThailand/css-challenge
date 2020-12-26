@@ -27,6 +27,7 @@ const buttonStyle = css`
   display: block;
   margin: 10px auto;
 `;
+
 const SummaryMessageBox: FunctionComponent<ISummaryMessageProps> = ({
   percentage,
   time,
@@ -38,6 +39,7 @@ const SummaryMessageBox: FunctionComponent<ISummaryMessageProps> = ({
       average within <Marked>{time} minutes</Marked> minutes, which puts you in
       the top <Marked>{rankPercentage}%</Marked> of all respondents
     </p>
+
     <button
       css={[baseButtonStyle, submitButtonStyle, buttonStyle]}
       type="button"
