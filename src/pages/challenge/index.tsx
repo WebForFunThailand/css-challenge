@@ -98,7 +98,10 @@ const Challenge = () => {
                 alt="Your result"
               />
               {/* rendering area */}
-              <style>{sanitizeCss(userCss)}</style>
+              <style
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: sanitizeCss(userCss) }}
+              />
               <div className="userDivContainer">
                 <div
                   className="userDivElement"
