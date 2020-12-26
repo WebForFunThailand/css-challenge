@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
 interface IScoreStateContext {
   rankPercentage: number;
@@ -10,9 +10,11 @@ interface IScoreStateEvent {
   onChangeScoreState: (newState: IScoreStateContext) => void;
 }
 
-const ScoreContext = createContext<IScoreStateContext & IScoreStateEvent>(null);
+export const ScoreContext = createContext<
+  IScoreStateContext & IScoreStateEvent
+>(null);
 
-export default ({ children }) => {
+const ScoreStateContext = ({ children }) => {
   const [scoreState, setScoreState] = useState<IScoreStateContext>({
     rankPercentage: 0,
     time: `00:00`,
@@ -29,3 +31,5 @@ export default ({ children }) => {
     </ScoreContext.Provider>
   );
 };
+
+export default ScoreStateContext;
