@@ -8,21 +8,21 @@ import { FunctionComponent } from 'react';
 
 const containerStyle = css`
   position: relative;
+  width: 600px;
+  margin: auto;
 `;
 
 const textCenteredStyle = css`
-  font-size: 105px;
-  width: 80%;
+  font-size: 4rem;
   margin-block-start: 0;
   margin-block-end: 0;
-  padding-left: 20%;
-  padding-top: 10%;
+  padding-top: 3rem;
 `;
 const boxStyle = css`
   position: absolute;
-  width: 300px;
-  height: 300px;
-  left: 15%;
+  width: 150px;
+  height: 150px;
+  transform: translateX(-50px);
   background: rgba(237, 20, 102, 0.05);
   border-radius: 30px;
 `;
