@@ -8,8 +8,7 @@ import SummaryMessageBox from '../../components/SummaryMessage';
 import { MainLayout } from '../../layouts/MainLayout';
 
 const graphStyle = css`
-  width: 600px;
-  height: 600px;
+  width: 800px;
   display: block;
   margin: 0 auto;
 `;
