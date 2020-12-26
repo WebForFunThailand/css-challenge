@@ -16,7 +16,7 @@ const titleStyle = css`
 
 const descriptionStyle = css`
   font-size: 20px;
-  font-weight: 200;
+  font-weight: 300;
   line-height: 28px;
 `;
 
