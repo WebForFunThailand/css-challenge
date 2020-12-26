@@ -25,6 +25,13 @@ const badgeLabelStyle = css`
   text-align: center;
 `;
 
+const result = css`
+  color: #ffffff;
+  padding: 25px;
+  border-radius: 95%;
+  background-color: #1168f8;
+`;
+
 const Summary: FunctionComponent = () => (
   <MainLayout>
     <div className="container">
@@ -41,6 +48,7 @@ const Summary: FunctionComponent = () => (
           You’re a <span css={badgeStyle}>CSS Wizard</span>
         </p>
         <img alt="graph" src="./graph.svg" css={graphStyle} />
+        <span css={result}>You</span>
         <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />
       </main>
     </div>
