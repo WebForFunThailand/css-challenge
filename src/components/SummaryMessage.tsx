@@ -14,7 +14,6 @@ interface ISummaryMessageProps {
 const Marked = styled.span`
   font-weight: bold;
   color: #1168f8;
-  margin: 10px;
 `;
 
 const contentStyle = css`
