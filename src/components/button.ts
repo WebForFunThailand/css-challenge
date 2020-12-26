@@ -27,7 +27,16 @@ export const submitButtonStyle = css`
   background: rgba(14, 104, 248, 0.1);
 
   &:hover {
-    background: rgba(14, 104, 248, 0.2);
+    background: rgba(14, 104, 248, 0.17);
+  }
+`;
+
+export const facebookButtonStyle = css`
+  color: rgb(14, 104, 248);
+  background: rgba(14, 104, 248, 0.1);
+
+  &:hover {
+    background: rgba(14, 104, 248, 0.17);
   }
 `;
 
