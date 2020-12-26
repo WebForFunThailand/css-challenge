@@ -7,6 +7,24 @@ import MessageBox from '../../components/Message';
 import SummaryMessageBox from '../../components/SummaryMessage';
 import { MainLayout } from '../../layouts/MainLayout';
 
+const graphStyle = css`
+  width: 450px;
+  height: 450px;
+  display: block;
+  margin: 0 auto;
+`;
+
+const badgeStyle = css`
+  font-weight: bold;
+  color: #ee1466;
+  font-size: 40px;
+`;
+
+const badgeLabelStyle = css`
+  font-size: 40px;
+  font-weight: 300;
+  text-align: center;
+`;
 const Summary: FunctionComponent = () => (
   <MainLayout>
     <div className="container">
@@ -19,9 +37,10 @@ const Summary: FunctionComponent = () => (
           title="Web For Fun #2 is now open for registration!"
           description="10 Minutes CSS Challenge is a game developed for the developer who has writing skills in CSS or interested in it. For this challenge, you’ll get an image and your job is to write CSS to be exactly same design as that image."
         />
-
-        <img alt="graph" src="./graph.svg" />
-
+        <p css={badgeLabelStyle}>
+          You’re a <span css={badgeStyle}>CSS Wizard</span>
+        </p>
+        <img alt="graph" src="./graph.svg" css={graphStyle} />
         <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />
       </main>
     </div>

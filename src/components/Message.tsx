@@ -4,7 +4,7 @@ import { jsx, css } from '@emotion/react';
 import { FunctionComponent } from 'react';
 
 const boxStyle = css`
-  padding: 30px;
+  padding: 20px;
   background-color: rgba(245, 126, 4, 0.1);
   margin: 20px auto;
 `;
