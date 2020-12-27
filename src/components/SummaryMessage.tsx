@@ -17,9 +17,11 @@ const Marked = styled.span`
 `;
 
 const contentStyle = css`
-  font-weight: 100;
-  font-size: 30px;
+  font-weight: 300;
+  font-size: 1.4rem;
   text-align: center;
+  margin: 30px auto;
+  width: 600px;
 `;
 
 const buttonStyle = css`

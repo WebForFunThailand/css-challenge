@@ -8,20 +8,20 @@ import SummaryMessageBox from '../../components/SummaryMessage';
 import { MainLayout } from '../../layouts/MainLayout';
 
 const graphStyle = css`
-  width: 800px;
+  width: 600px;
   display: block;
   margin: 0 auto;
+  margin-top: -20px;
   position: relative;
 `;
 
 const badgeStyle = css`
   font-weight: bold;
   color: #ee1466;
-  font-size: 40px;
 `;
 
 const badgeLabelStyle = css`
-  font-size: 40px;
+  font-size: 2rem;
   font-weight: 300;
   text-align: center;
 `;
@@ -66,7 +66,7 @@ const graphAxis = css`
   }
   &:nth-of-type(2) {
     top: calc(50% - 1.4rem / 2 - 7px);
-    left: -62px;
+    left: 40px;
   }
 `;
 
