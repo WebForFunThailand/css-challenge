@@ -34,13 +34,22 @@ const resultPosition = css`
 
 const circleResult = css`
   color: #ffffff;
-  padding: 25px;
-  border-radius: 95%;
   background-color: #1168f8;
+  font-size: 0.8rem;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const textResult = css`
-  margin: 35px 0 0 0;
+  top: -57px;
+  left: 25px;
+  position: absolute;
+  width: 200px;
   color: #1168f8;
 `;
 
@@ -59,11 +68,18 @@ const Summary: FunctionComponent = () => (
         <p css={badgeLabelStyle}>
           You’re a <span css={badgeStyle}>CSS Wizard</span>
         </p>
-        <img alt="graph" src="./graph.svg" css={graphStyle} />
-        <div css={resultPosition}>
-          <span css={circleResult}>You</span>
-          <p css={textResult}>8:10 minutes 88% avg accuracy</p>
+        <div>
+          <img alt="graph" src="./graph.svg" css={graphStyle} />
+          <div css={resultPosition}>
+            <div css={circleResult}>You</div>
+            <p css={textResult}>
+              8:10 minutes
+              <br />
+              88% avg accuracy
+            </p>
+          </div>
         </div>
+
         <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />
       </main>
     </div>
