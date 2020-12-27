@@ -54,6 +54,22 @@ const textResult = css`
   padding: 5px;
 `;
 
+const graphAxis = css`
+  position: absolute;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #555;
+
+  &:nth-of-type(1) {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &:nth-of-type(2) {
+    top: calc(50% - 1.4rem / 2 - 7px);
+    left: -62px;
+  }
+`;
+
 const Summary: FunctionComponent = () => (
   <MainLayout>
     <div className="container">
@@ -72,9 +88,12 @@ const Summary: FunctionComponent = () => (
         <div
           css={css`
             position: relative;
+            transform: scale(0.9);
           `}
         >
           <img alt="graph" src="./graph.svg" css={graphStyle} />
+          <div css={graphAxis}>Accuracy</div>
+          <div css={graphAxis}>Time</div>
           <div css={resultPosition} style={{ top: '50%', left: '50%' }}>
             <div css={circleResult}>You</div>
             <p css={textResult}>
