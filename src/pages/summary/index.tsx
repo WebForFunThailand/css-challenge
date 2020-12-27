@@ -28,8 +28,6 @@ const badgeLabelStyle = css`
 
 const resultPosition = css`
   position: absolute;
-  top: 600px;
-  left: 500px;
 `;
 
 const circleResult = css`
@@ -46,11 +44,14 @@ const circleResult = css`
 `;
 
 const textResult = css`
-  top: -57px;
-  left: 25px;
+  top: -62px;
+  left: 33px;
   position: absolute;
-  width: 200px;
+  width: 140px;
   color: #1168f8;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #ddd;
+  padding: 5px;
 `;
 
 const Summary: FunctionComponent = () => (
@@ -68,9 +69,13 @@ const Summary: FunctionComponent = () => (
         <p css={badgeLabelStyle}>
           You’re a <span css={badgeStyle}>CSS Wizard</span>
         </p>
-        <div>
+        <div
+          css={css`
+            position: relative;
+          `}
+        >
           <img alt="graph" src="./graph.svg" css={graphStyle} />
-          <div css={resultPosition}>
+          <div css={resultPosition} style={{ top: '50%', left: '50%' }}>
             <div css={circleResult}>You</div>
             <p css={textResult}>
               8:10 minutes
