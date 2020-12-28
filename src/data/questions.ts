@@ -9,7 +9,7 @@ interface Question {
 
 const questions: Question[] = [
   {
-    id: `debug-easy`,
+    id: `debug-easy1`,
     difficulty: `e`,
     image: `q0.png`,
     defaultHtml: `<div class='debug-question'></div>`,
@@ -17,7 +17,15 @@ const questions: Question[] = [
     usedPixels: 50000,
   },
   {
-    id: `debug-medium`,
+    id: `debug-easy2`,
+    difficulty: `e`,
+    image: `q1.png`,
+    defaultHtml: `<div class='debug-question2'></div>`,
+    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    usedPixels: 50000,
+  },
+  {
+    id: `debug-medium1`,
     difficulty: `m`,
     image: `q0.png`,
     defaultHtml: `<div class='debug-question'></div>`,
@@ -25,10 +33,26 @@ const questions: Question[] = [
     usedPixels: 50000,
   },
   {
-    id: `debug-hard`,
+    id: `debug-medium2`,
+    difficulty: `m`,
+    image: `q1.png`,
+    defaultHtml: `<div class='debug-question2'></div>`,
+    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    usedPixels: 50000,
+  },
+  {
+    id: `debug-hard1`,
     difficulty: `h`,
     image: `q0.png`,
     defaultHtml: `<div class='debug-question'></div>`,
+    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    usedPixels: 50000,
+  },
+  {
+    id: `debug-hard2`,
+    difficulty: `h`,
+    image: `q1.png`,
+    defaultHtml: `<div class='debug-question2'></div>`,
     defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
     usedPixels: 50000,
   },
