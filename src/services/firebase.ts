@@ -1,7 +1,8 @@
 import firebase from 'firebase';
 import { nanoid } from 'nanoid';
-
 import { IScore } from '../types/IUserScore';
+import getScorePercentage from '../utils/getScorePercentage';
+import getRankName from '../utils/getRankName';
 
 const firebaseConfig = {
   apiKey: `AIzaSyD7hm0rC616aWFG8O2o5gphXixnaexfo64`,
@@ -44,13 +45,30 @@ export const getScoreById = (id: string): Promise<IScore> =>
 
 type ICreateScore = Pick<IScore, 'time' | 'score'>;
 
-export const createNewScore = (data: ICreateScore): Promise<void> =>
+const mockListRank = [
+  { name: `Wizard`, min: 0, max: 20 },
+  { name: `Master`, min: 21, max: 40 },
+];
+
+const mockScore = 300;
+
+export const createNewScore = ({ time, score }: ICreateScore): Promise<void> =>
   new Promise((resolve, reject) => {
+    const userRank = getRankName(mockListRank, score);
+
+    const newData: IScore = {
+      name: userRank,
+      time,
+      percentage: getScorePercentage(mockScore, score),
+      rankPercentage: 30,
+      score,
+    };
+
     const id = nanoid(20);
     const db = firebase.firestore();
     db.collection(`scores`)
       .doc(id)
-      .set(data)
+      .set(newData)
       .then(() => resolve())
       .catch((err) => reject(err));
   });
