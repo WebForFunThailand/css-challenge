@@ -38,7 +38,7 @@ const MAX_TIME = 60 * 10;
 const QUESTIONS_DIFFICULTY_ARR = [`e`, `m`, `h`];
 const QUESTIONS_LENGTH = QUESTIONS_DIFFICULTY_ARR.length;
 
-function* getUniqFromArray(arr) {
+function* getUniqFromArray(arr: any[]) {
   yield arr.splice(Math.floor(Math.random() * arr.length), 1);
   yield* getUniqFromArray(arr);
 }
