@@ -42,10 +42,14 @@ const MAX_TIME = 60 * 10;
 const QUESTIONS_DIFFICULTY_ARR = [`e`, `m`, `h`];
 const QUESTIONS_LENGTH = QUESTIONS_DIFFICULTY_ARR.length;
 
+function* getUniqFromArrayInternal<T>(arr: T[]) {
+  yield arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
+  if (arr.length) yield* getUniqFromArrayInternal(arr);
+}
+
 function* getUniqFromArray<T>(arr: T[]) {
-  const cpy_arr = Array.from(arr);
-  yield cpy_arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
-  if (cpy_arr.length) yield* getUniqFromArray(cpy_arr);
+  // Fix from CasperX
+  yield* getUniqFromArrayInternal(Array.from(arr));
 }
 
 const Editor = dynamic(() => import(`@/components/Editor`), {
