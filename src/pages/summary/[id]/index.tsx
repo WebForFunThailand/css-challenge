@@ -3,10 +3,11 @@
 import { jsx, css } from '@emotion/react';
 import Head from 'next/head';
 import { NextPage } from 'next';
-import MessageBox from '../../components/Message';
-import SummaryMessageBox from '../../components/SummaryMessage';
-import UserScore from '../../components/UserScore';
-import { MainLayout } from '../../layouts/MainLayout';
+import MessageBox from '../../../components/Message';
+import SummaryMessageBox from '../../../components/SummaryMessage';
+import UserScore from '../../../components/UserScore';
+import { MainLayout } from '../../../layouts/MainLayout';
+import { getScoreById, createNewScore } from '../../../services/firebase';
 
 const graphStyle = css`
   width: 600px;
@@ -43,9 +44,21 @@ const graphAxis = css`
   }
 `;
 
-const Summary: NextPage = () => {
+interface ISummaryPage {
+  name: string;
+  percentage: number;
+  rankPercentage: number;
+  time: string;
+}
+
+const Summary: NextPage<ISummaryPage> = ({
+  name,
+  percentage,
+  rankPercentage,
+  time,
+}) => {
   const seoInfo = {
-    title: `You are CSS Wizard`,
+    title: `You are ${name}`,
     description: `10 Minutes CSS Challenge is a game developed for the developer who has writing skills in CSS or interested in it. For this challenge, you’ll get an image and your job is to write CSS to be exactly same design as that image.`,
     image: `https://webforfun.dev/static/40ea6582af50f3afb237931d3dd76e72/47203/logo.webp`,
     cardLabel: `CSS Challenge Web for fun`,
@@ -84,16 +97,25 @@ const Summary: NextPage = () => {
               transform: scale(0.9);
             `}
           >
-            <img alt="graph" src="./graph.svg" css={graphStyle} />
+            <img alt="graph" src="../../graph.svg" css={graphStyle} />
             <div css={graphAxis}>Accuracy</div>
             <div css={graphAxis}>Time</div>
-            <UserScore time="9:10" percentage={88} />
+            <UserScore time={time} percentage={percentage} />
           </div>
-          <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />
+          <SummaryMessageBox
+            rankPercentage={rankPercentage}
+            time={time}
+            percentage={percentage}
+          />
         </main>
       </div>
     </MainLayout>
   );
 };
 
+Summary.getInitialProps = async ({ query }): Promise<ISummaryPage> => {
+  const id = query.id as string;
+  const result = await getScoreById(id);
+  return result;
+};
 export default Summary;
