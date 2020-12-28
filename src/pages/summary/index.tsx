@@ -1,10 +1,11 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
-import { FunctionComponent } from 'react';
 import Head from 'next/head';
+import { NextPage } from 'next';
 import MessageBox from '../../components/Message';
 import SummaryMessageBox from '../../components/SummaryMessage';
+import UserScore from '../../components/UserScore';
 import { MainLayout } from '../../layouts/MainLayout';
 
 const graphStyle = css`
@@ -26,34 +27,6 @@ const badgeLabelStyle = css`
   text-align: center;
 `;
 
-const resultPosition = css`
-  position: absolute;
-`;
-
-const circleResult = css`
-  color: #ffffff;
-  background-color: #1168f8;
-  font-size: 0.8rem;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const textResult = css`
-  top: -62px;
-  left: 33px;
-  position: absolute;
-  width: 140px;
-  color: #1168f8;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid #ddd;
-  padding: 5px;
-`;
-
 const graphAxis = css`
   position: absolute;
   font-size: 1.4rem;
@@ -70,7 +43,7 @@ const graphAxis = css`
   }
 `;
 
-const Summary: FunctionComponent = () => (
+const Summary: NextPage = () => (
   <MainLayout>
     <div className="container">
       <Head>
@@ -94,14 +67,7 @@ const Summary: FunctionComponent = () => (
           <img alt="graph" src="./graph.svg" css={graphStyle} />
           <div css={graphAxis}>Accuracy</div>
           <div css={graphAxis}>Time</div>
-          <div css={resultPosition} style={{ top: '50%', left: '50%' }}>
-            <div css={circleResult}>You</div>
-            <p css={textResult}>
-              8:10 minutes
-              <br />
-              88% avg accuracy
-            </p>
-          </div>
+          <UserScore time="9:10" percentage={88} />
         </div>
 
         <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />

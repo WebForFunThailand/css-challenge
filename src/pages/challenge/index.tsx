@@ -63,7 +63,7 @@ const EXAMPLE_STEP: StepperDataInterface[] = [
 
 const Challenge: NextPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [questionHtml, setQuestionHtml] = useState(
+  const [questionHtml] = useState(
     `<!-- view only -->\n<div class='question1'></div>`,
   );
   const [userCss, setUserCss] = useState(
