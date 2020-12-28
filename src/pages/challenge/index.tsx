@@ -59,6 +59,27 @@ const sanitizeCss = (rawCssString: string) =>
     .join(`}`)
     .replace(/url\(.*?\)/g, `url()`);
 
+const roundTo2Decimals = (num: number) =>
+  Math.round((num + Number.EPSILON) * 100) / 100;
+
+const createImageElement = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolveFn, rejectFn) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => resolveFn(img);
+    img.onerror = () => rejectFn(img);
+  });
+
+const generateCanvas = async (url: string) => {
+  const img = await createImageElement(url);
+  const canvas = document.createElement(`canvas`);
+  canvas.width = DIMENSION;
+  canvas.height = DIMENSION;
+  const canvasCtx = canvas.getContext(`2d`);
+  canvasCtx.drawImage(img, 0, 0);
+  return canvasCtx;
+};
+
 const Challenge: NextPage = () => {
   const [questionData, setQuestionData] = useState<IQuestionDataInterface[]>(
     [],
@@ -87,29 +108,30 @@ const Challenge: NextPage = () => {
     });
   }, []);
 
+  // react hook
   const [currentQuestion, setCurrentQuestion] = useState(0);
-
   const [expectedImage, setExpectedImage] = useState(`/img/blank.png`);
   const [questionHtml, setPartialQuestionHtml] = useState(`<!-- View Only -->`);
-  const setQuestionHtml = (html: string) =>
-    setPartialQuestionHtml(`<!-- View Only -->\n${html}`);
+  const [resultImageForCompare, setResultImageForCompare] = useState(``);
   const [userCss, setUserCss] = useState(``);
   const [questionUsedPixels, setQuestionUsedPixels] = useState(0);
+
+  const resultDiv = useRef(null);
+  const resultImage = useRef(null);
 
   useEffect(() => {
     const { image, defaultHtml, defaultCss, usedPixels } = questions[
       currentQuestion
     ];
     setExpectedImage(`/img/${image}`);
-    setQuestionHtml(defaultHtml);
+
+    setPartialQuestionHtml(`<!-- View Only -->\n${defaultHtml}`);
     setUserCss(defaultCss);
     setQuestionUsedPixels(usedPixels);
   }, [currentQuestion]);
 
   // Convert User Div into Canvas
-  const resultDiv = useRef(null);
-  const resultImage = useRef(null);
-  const [resultImageForCompare, setResultImageForCompare] = useState(``);
+
   useEffect(() => {
     domtoimage.toPng(resultDiv.current).then((dataUrl: string) => {
       resultImage.current.src = dataUrl;
@@ -120,27 +142,6 @@ const Challenge: NextPage = () => {
         setResultImageForCompare(dataUrl);
       });
   }, [userCss]);
-
-  const createImageElement = (url: string): Promise<HTMLImageElement> =>
-    new Promise((resolveFn, rejectFn) => {
-      const img = new Image();
-      img.src = url;
-      img.onload = () => resolveFn(img);
-      img.onerror = () => rejectFn(img);
-    });
-
-  const generateCanvas = async (url: string) => {
-    const img = await createImageElement(url);
-    const canvas = document.createElement(`canvas`);
-    canvas.width = DIMENSION;
-    canvas.height = DIMENSION;
-    const canvasCtx = canvas.getContext(`2d`);
-    canvasCtx.drawImage(img, 0, 0);
-    return canvasCtx;
-  };
-
-  const roundTo2Decimals = (num: number) =>
-    Math.round((num + Number.EPSILON) * 100) / 100;
 
   const diffImage = async () => {
     const [expectedCanvas, resultCanvas] = await Promise.all([
