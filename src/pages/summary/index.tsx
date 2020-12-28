@@ -49,6 +49,17 @@ const Summary: NextPage = () => (
       <Head>
         <title>Summary</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://metatags.io/" />
+        <meta property="og:title" content="You are CSS Wizard" />
+        <meta
+          property="og:description"
+          content="10 Minutes CSS Challenge is a game developed for the developer who has writing skills in CSS or interested in it. For this challenge, you’ll get an image and your job is to write CSS to be exactly same design as that image."
+        />
+        <meta
+          property="og:image"
+          content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png"
+        />
       </Head>
       <main>
         <MessageBox
@@ -69,7 +80,6 @@ const Summary: NextPage = () => (
           <div css={graphAxis}>Time</div>
           <UserScore time="9:10" percentage={88} />
         </div>
-
         <SummaryMessageBox rankPercentage={11} time="11:30" percentage={75} />
       </main>
     </div>
