@@ -38,9 +38,10 @@ const MAX_TIME = 60 * 10;
 const QUESTIONS_DIFFICULTY_ARR = [`e`, `m`, `h`];
 const QUESTIONS_LENGTH = QUESTIONS_DIFFICULTY_ARR.length;
 
-function* getUniqFromArray(arr: any[]) {
-  yield arr.splice(Math.floor(Math.random() * arr.length), 1);
-  yield* getUniqFromArray(arr);
+function* getUniqFromArray<T>(arr: T[]) {
+  const cpy_arr = Array.from(arr);
+  yield cpy_arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
+  if (cpy_arr.length) yield* getUniqFromArray(cpy_arr);
 }
 
 const Editor = dynamic(() => import(`@/components/Editor`), {
@@ -72,7 +73,7 @@ const Challenge: NextPage = () => {
         ),
       };
       return QUESTIONS_DIFFICULTY_ARR.map((e: 'e' | 'm' | 'h') => ({
-        questionId: questionGenerator[e].next().value[0].id,
+        questionId: questionGenerator[e].next().value.id,
         score: 0,
         status: `idle`,
       })) as questionDataInterface[];
