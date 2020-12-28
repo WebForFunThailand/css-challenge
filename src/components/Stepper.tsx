@@ -2,14 +2,10 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
 import { FunctionComponent } from 'react';
+import { IStepper } from '@/types/IStepper';
 
-export interface StepperDataInterface {
-  questionId: string;
-  status: `idle` | 'skip' | 'done';
-}
-
-interface StepperProps {
-  data: StepperDataInterface[];
+interface IStepperProps {
+  data: IStepper[];
 }
 
 const StepperContainer = css`
@@ -63,7 +59,7 @@ const statusStyle = {
   `,
 };
 
-const Stepper: FunctionComponent<StepperProps> = ({ data }) => (
+const Stepper: FunctionComponent<IStepperProps> = ({ data }) => (
   <div css={StepperContainer}>
     {data.map(({ status, questionId }, index) => (
       <div css={[StepperNode, statusStyle[status]]} key={questionId}>

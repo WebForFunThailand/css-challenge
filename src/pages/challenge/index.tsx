@@ -10,12 +10,14 @@ import pixelmatch from 'pixelmatch';
 import questions from '@/data/questions';
 import { MainLayout } from '@/layouts/MainLayout';
 import Timer from '@/components/Timer';
-import Stepper, { StepperDataInterface } from '@/components/Stepper';
+import Stepper from '@/components/Stepper';
 import {
   baseButtonStyle,
   skipButtonStyle,
   submitButtonStyle,
 } from '@/components/button';
+import { IStepper } from '@/types/IStepper';
+
 import {
   EditorLayout,
   ExpectedResultSection,
@@ -25,9 +27,9 @@ import {
   CssEditorSection,
   ActionSection,
   EditorContainer,
-} from '../../components/style-helper';
+} from '@/components/style-helper';
 
-interface questionDataInterface extends StepperDataInterface {
+interface IQuestionDataInterface extends IStepper {
   score: number;
 }
 
@@ -58,7 +60,9 @@ const sanitizeCss = (rawCssString: string) =>
     .replace(/url\(.*?\)/g, `url()`);
 
 const Challenge: NextPage = () => {
-  const [questionData, setQuestionData] = useState<questionDataInterface[]>([]);
+  const [questionData, setQuestionData] = useState<IQuestionDataInterface[]>(
+    [],
+  );
   useEffect(() => {
     setQuestionData(() => {
       const questionGenerator = {
@@ -72,11 +76,14 @@ const Challenge: NextPage = () => {
           questions.filter(({ difficulty }) => difficulty === `h`),
         ),
       };
-      return QUESTIONS_DIFFICULTY_ARR.map((e: 'e' | 'm' | 'h') => ({
-        questionId: questionGenerator[e].next().value.id,
-        score: 0,
-        status: `idle`,
-      })) as questionDataInterface[];
+
+      return QUESTIONS_DIFFICULTY_ARR.map(
+        (e: 'e' | 'm' | 'h'): IQuestionDataInterface => ({
+          questionId: questionGenerator[e].next().value.id,
+          score: 0,
+          status: `idle`,
+        }),
+      );
     });
   }, []);
 
@@ -156,7 +163,7 @@ const Challenge: NextPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmitAnswer = async (isSkipped = false) => {
     setIsSubmitting(true);
-    const changedStatusCurrentQuestion: questionDataInterface = {
+    const changedStatusCurrentQuestion: IQuestionDataInterface = {
       ...questionData[currentQuestion],
       status: isSkipped ? `skip` : `done`,
       score: isSkipped ? 0 : await diffImage(),

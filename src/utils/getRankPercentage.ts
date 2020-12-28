@@ -1,3 +1,3 @@
-export default (listScores: number[]): number => {
+export default (listScores: number[]): void => {
   const sorted = listScores.sort();
 };

@@ -1,8 +1,8 @@
 import firebase from 'firebase';
 import { nanoid } from 'nanoid';
-import { IScore } from '../types/IUserScore';
-import getScorePercentage from '../utils/getScorePercentage';
-import getRankName from '../utils/getRankName';
+import { IScore } from '@/types/IUserScore';
+import getScorePercentage from '@/utils/getScorePercentage';
+import getRankName from '@/utils/getRankName';
 
 const firebaseConfig = {
   apiKey: `AIzaSyD7hm0rC616aWFG8O2o5gphXixnaexfo64`,

@@ -5,11 +5,11 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { jsx, css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { center } from '../components/style-helper';
-import { MainLayout } from '../layouts/MainLayout';
-import { MobileLayout } from '../layouts/MobileLayout';
-import { Header } from '../components/Header';
-import { baseButtonStyle, challengeButtonStyle } from '../components/button';
+import { center } from '@/components/style-helper';
+import { MainLayout } from '@/layouts/MainLayout';
+import { MobileLayout } from '@/layouts/MobileLayout';
+import { Header } from '@/components/Header';
+import { baseButtonStyle, challengeButtonStyle } from '@/components/button';
 
 const IPAD_PRO_WIDTH = 1366;
 

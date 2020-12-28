@@ -3,11 +3,11 @@
 import { jsx, css } from '@emotion/react';
 import Head from 'next/head';
 import { NextPage } from 'next';
-import MessageBox from '../../../components/Message';
-import SummaryMessageBox from '../../../components/SummaryMessage';
-import UserScore from '../../../components/UserScore';
-import { MainLayout } from '../../../layouts/MainLayout';
-import { getScoreById } from '../../../services/firebase';
+import MessageBox from '@/components/Message';
+import SummaryMessageBox from '@/components/SummaryMessage';
+import UserScore from '@/components/UserScore';
+import { MainLayout } from '@/layouts/MainLayout';
+import { getScoreById } from '@/services/firebase';
 
 const graphStyle = css`
   width: 600px;
