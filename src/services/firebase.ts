@@ -52,7 +52,10 @@ const mockListRank = [
 
 const mockScore = 300;
 
-export const createNewScore = ({ time, score }: ICreateScore): Promise<void> =>
+export const createNewScore = ({
+  time,
+  score,
+}: ICreateScore): Promise<string> =>
   new Promise((resolve, reject) => {
     const userRank = getRankName(mockListRank, score);
 
@@ -69,7 +72,7 @@ export const createNewScore = ({ time, score }: ICreateScore): Promise<void> =>
     db.collection(`scores`)
       .doc(id)
       .set(newData)
-      .then(() => resolve())
+      .then(() => resolve(id))
       .catch((err) => reject(err));
   });
 

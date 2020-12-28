@@ -5,8 +5,10 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { jsx } from '@emotion/react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import domtoimage from 'dom-to-image';
 import pixelmatch from 'pixelmatch';
+import { createNewScore } from '@/services/firebase';
 import questions from '@/data/questions';
 import { MainLayout } from '@/layouts/MainLayout';
 import Timer from '@/components/Timer';
@@ -81,6 +83,7 @@ const generateCanvas = async (url: string) => {
 };
 
 const Challenge: NextPage = () => {
+  const router = useRouter();
   const [questionData, setQuestionData] = useState<IQuestionDataInterface[]>(
     [],
   );
@@ -115,6 +118,7 @@ const Challenge: NextPage = () => {
   const [resultImageForCompare, setResultImageForCompare] = useState(``);
   const [userCss, setUserCss] = useState(``);
   const [questionUsedPixels, setQuestionUsedPixels] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resultDiv = useRef(null);
   const resultImage = useRef(null);
@@ -161,18 +165,36 @@ const Challenge: NextPage = () => {
     );
   };
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmitAnswer = async (isSkipped = false) => {
     setIsSubmitting(true);
+
     const changedStatusCurrentQuestion: IQuestionDataInterface = {
       ...questionData[currentQuestion],
       status: isSkipped ? `skip` : `done`,
       score: isSkipped ? 0 : await diffImage(),
     };
-    setIsSubmitting(false);
+
     const newQuestionData = questionData.map((question, index) =>
       index === currentQuestion ? changedStatusCurrentQuestion : question,
     );
+
+    console.log(`current`, currentQuestion);
+    if (currentQuestion === QUESTIONS_LENGTH) {
+      const totalScore = newQuestionData.reduce(
+        (total, { score }) => total + score,
+        0,
+      );
+      const newScoreId = await createNewScore({
+        time: `11:30`,
+        score: totalScore,
+      });
+
+      router.push(`/summary/${newScoreId}`);
+      return;
+    }
+
+    setIsSubmitting(false);
+
     setQuestionData(newQuestionData);
     setCurrentQuestion((current) => {
       if (current + 1 === QUESTIONS_LENGTH) {
@@ -180,7 +202,7 @@ const Challenge: NextPage = () => {
         console.log(
           newQuestionData.reduce((total, { score }) => total + score, 0),
         );
-        return current;
+        // return current;
       }
       return current + 1;
     });
