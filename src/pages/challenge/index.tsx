@@ -178,7 +178,6 @@ const Challenge: NextPage = () => {
       index === currentQuestion ? changedStatusCurrentQuestion : question,
     );
 
-    console.log(`current`, currentQuestion);
     if (currentQuestion === QUESTIONS_LENGTH) {
       const totalScore = newQuestionData.reduce(
         (total, { score }) => total + score,
