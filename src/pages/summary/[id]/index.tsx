@@ -7,7 +7,7 @@ import MessageBox from '../../../components/Message';
 import SummaryMessageBox from '../../../components/SummaryMessage';
 import UserScore from '../../../components/UserScore';
 import { MainLayout } from '../../../layouts/MainLayout';
-import { getScoreById, createNewScore } from '../../../services/firebase';
+import { getScoreById } from '../../../services/firebase';
 
 const graphStyle = css`
   width: 600px;

@@ -36,12 +36,15 @@ export const getScoreById = (id: string): Promise<IScore> =>
           percentage: scoreInfo.percentage,
           rankPercentage: scoreInfo.rankPercentage,
           time: scoreInfo.time,
+          score: scoreInfo.score,
         });
       })
       .catch((err) => reject(err));
   });
 
-export const createNewScore = (data: IScore): Promise<void> =>
+type ICreateScore = Pick<IScore, 'time' | 'score'>;
+
+export const createNewScore = (data: ICreateScore): Promise<void> =>
   new Promise((resolve, reject) => {
     const id = nanoid(20);
     const db = firebase.firestore();

@@ -3,4 +3,5 @@ export interface IScore {
   percentage: number;
   rankPercentage: number;
   time: string;
+  score: number;
 }
