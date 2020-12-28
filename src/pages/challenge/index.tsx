@@ -38,6 +38,11 @@ const MAX_TIME = 60 * 10;
 const QUESTIONS_DIFFICULTY_ARR = [`e`, `m`, `h`];
 const QUESTIONS_LENGTH = QUESTIONS_DIFFICULTY_ARR.length;
 
+function* getUniqFromArray(arr) {
+  yield arr.splice(Math.floor(Math.random() * arr.length), 1);
+  yield* getUniqFromArray(arr);
+}
+
 const Editor = dynamic(() => import(`@/components/Editor`), {
   ssr: false,
 });
@@ -53,19 +58,25 @@ const sanitizeCss = (rawCssString: string) =>
 
 const Challenge: NextPage = () => {
   const [questionData, setQuestionData] = useState<questionDataInterface[]>([]);
-  const getRandomQuestionFromDifficulty = (difficulty: 'e' | 'm' | 'h') => {
-    const questionList = questions.filter((q) => difficulty === q.difficulty);
-    const questionLength = questionList.length;
-    return questionList[Math.floor(Math.random() * questionLength)].id;
-  };
   useEffect(() => {
-    setQuestionData(
-      QUESTIONS_DIFFICULTY_ARR.map((e: 'e' | 'm' | 'h') => ({
-        questionId: getRandomQuestionFromDifficulty(e),
+    setQuestionData(() => {
+      const questionGenerator = {
+        e: getUniqFromArray(
+          questions.filter(({ difficulty }) => difficulty === `e`),
+        ),
+        m: getUniqFromArray(
+          questions.filter(({ difficulty }) => difficulty === `m`),
+        ),
+        h: getUniqFromArray(
+          questions.filter(({ difficulty }) => difficulty === `h`),
+        ),
+      };
+      return QUESTIONS_DIFFICULTY_ARR.map((e: 'e' | 'm' | 'h') => ({
+        questionId: questionGenerator[e].next().value[0].id,
         score: 0,
         status: `idle`,
-      })) as questionDataInterface[],
-    );
+      })) as questionDataInterface[];
+    });
   }, []);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -156,6 +167,7 @@ const Challenge: NextPage = () => {
     setQuestionData(newQuestionData);
     setCurrentQuestion((current) => {
       if (current + 1 === QUESTIONS_LENGTH) {
+        // eslint-disable-next-line no-console
         console.log(
           newQuestionData.reduce((total, { score }) => total + score, 0),
         );
