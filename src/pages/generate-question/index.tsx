@@ -33,15 +33,13 @@ const sanitizeCss = (rawCssString: string) =>
 
 const Challenge: NextPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [questionId, setQuestionId] = useState(`question0`);
   const [questionHtml, setQuestionHtml] = useState(
-    `<!-- View Only -->\n<div class='question1'></div>`,
+    `<div class='classname'></div>`,
   );
-  const [userCss, setUserCss] = useState(
-    `.question1 {\n    /* Enter Your CSS Here */\n}`,
-  );
-  const [questionId, setQuestionId] = useState(0);
+  const [userCss, setUserCss] = useState(`.classname {\n    \n}`);
   const questionIdChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuestionId(+event.target.value);
+    setQuestionId(event.target.value);
   };
   const [questionDifficulty, setQuestionDifficulty] = useState(`e`);
   const questionDifficultyChangeHandler = (
@@ -50,6 +48,13 @@ const Challenge: NextPage = () => {
     setQuestionDifficulty(event.target.value);
   };
 
+  const formatHtml = (rawHtmlString: string) => rawHtmlString.replace(`\n`, ``);
+  const formatCss = (rawCssString: string) =>
+    rawCssString
+      .replace(`\n`, ``)
+      .replace(/\s+/g, ` `)
+      .replace(/\{.+?\}/gm, `{\\n    /* Enter Your CSS Here */\\n}`);
+
   // Convert User Div into Canvas
   const userDiv = useRef(null);
   const expectedImage = useRef(null);
@@ -57,7 +62,6 @@ const Challenge: NextPage = () => {
 
   // Diff
   const DIMENSION = 500;
-  const TOTAL_PIXEL = DIMENSION * DIMENSION;
 
   const generateCanvas = (ref: HTMLImageElement) => {
     const canvas = document.createElement(`canvas`);
@@ -71,7 +75,6 @@ const Challenge: NextPage = () => {
   const [diffPixels, setDiffPixels] = useState(0);
 
   const diffImage = (resultImageForCompareImage) => {
-    console.log(resultImageForCompareImage, expectedImage.current);
     // Diff
     const diffPx = pixelmatch(
       generateCanvas(expectedImage.current).getImageData(
@@ -107,7 +110,7 @@ const Challenge: NextPage = () => {
     <MainLayout>
       <div>
         <Head>
-          <title>Challenge</title>
+          <title>Generate Question</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main>
@@ -125,9 +128,9 @@ const Challenge: NextPage = () => {
               >
                 Question ID:
                 <input
-                  defaultValue={0}
                   type="text"
                   id="question-id"
+                  value={questionId}
                   onChange={questionIdChangeHandler}
                   style={{ width: `100%` }}
                 />
@@ -139,6 +142,7 @@ const Challenge: NextPage = () => {
                 Difficulty:
                 <select
                   id="question-difficulty"
+                  value={questionDifficulty}
                   onChange={questionDifficultyChangeHandler}
                   style={{ width: `100%` }}
                 >
@@ -150,11 +154,10 @@ const Challenge: NextPage = () => {
               <div style={{ border: `1px solid black`, padding: `8px` }}>
                 <code>
                   {`{`}
-                  id: {questionId}, difficulty: `{questionDifficulty}`, image:
-                  `q
-                  {questionId}.png`, defaultHtml: `
-                  {questionHtml.replace(`\n`, ``)}`, defaultCss: `
-                  {userCss.replace(`\n`, ``)}`, usedPixels: {diffPixels},{`}`},
+                  id: `{questionId}`, difficulty: `{questionDifficulty}`, image:
+                  `{questionId}.png`, defaultHtml: `{formatHtml(questionHtml)}`,
+                  defaultCss: `{formatCss(userCss)}`, usedPixels: {diffPixels},
+                  {`}`},
                 </code>
               </div>
             </div>

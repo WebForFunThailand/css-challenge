@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { jsx } from '@emotion/react';
-import { MainLayout } from '@/layouts/MainLayout';
 import dynamic from 'next/dynamic';
-import useDomToImage from '@/hooks/useDomToImage';
+import domtoimage from 'dom-to-image';
+import pixelmatch from 'pixelmatch';
+import questions from '@/data/questions';
+import { MainLayout } from '@/layouts/MainLayout';
 import Timer from '@/components/Timer';
 import Stepper, { StepperDataInterface } from '@/components/Stepper';
 import {
@@ -14,7 +16,6 @@ import {
   skipButtonStyle,
   submitButtonStyle,
 } from '@/components/button';
-import pixelmatch from 'pixelmatch';
 import {
   EditorLayout,
   ExpectedResultSection,
@@ -26,95 +27,142 @@ import {
   EditorContainer,
 } from '../../components/style-helper';
 
+interface questionDataInterface extends StepperDataInterface {
+  score: number;
+}
+
+const DIMENSION = 500;
+const TOTAL_PIXEL = DIMENSION * DIMENSION;
+const isTimerPause = false;
+const MAX_TIME = 60 * 10;
+const QUESTIONS_DIFFICULTY_ARR = [`e`, `m`, `h`];
+const QUESTIONS_LENGTH = QUESTIONS_DIFFICULTY_ARR.length;
+
 const Editor = dynamic(() => import(`@/components/Editor`), {
   ssr: false,
 });
 
 const sanitizeCss = (rawCssString: string) =>
-  // Algorithm
-  // 1. Make it a long string without newline
-  // 2. Split up '}'
-  // 3. Check if the string has a text or not
-  //    - If true: Append safe element to it
-  //    - If not: Do nothing
-  // 4. Join them up
   rawCssString
-    .split(`\n`)
-    .join(``)
+    .replace(/\n/g, ``)
+    .replace(/\s+/g, ` `)
     .split(`}`)
     .map((e) => (e.trim().length ? `.userDivElement>${e}` : e))
     .join(`}`)
     .replace(/url\(.*?\)/g, `url()`);
 
-// Timer
-const isTimerPause = false;
-const MAX_TIME = 60 * 10;
-
-// Stepper
-const EXAMPLE_STEP: StepperDataInterface[] = [
-  { id: 1, status: `done` },
-  { id: 2, status: `skip` },
-  { id: 3, status: `done` },
-  { id: 4, status: `idle` },
-  { id: 5, status: `idle` },
-  { id: 6, status: `idle` },
-  { id: 7, status: `idle` },
-];
-
 const Challenge: NextPage = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [questionHtml] = useState(
-    `<!-- view only -->\n<div class='question1'></div>`,
-  );
-  const [userCss, setUserCss] = useState(
-    `.question1 {\n    /* Enter Your CSS Here */\n}`,
-  );
+  const [questionData, setQuestionData] = useState<questionDataInterface[]>([]);
+  const getRandomQuestionFromDifficulty = (difficulty: 'e' | 'm' | 'h') => {
+    const questionList = questions.filter((q) => difficulty === q.difficulty);
+    const questionLength = questionList.length;
+    return questionList[Math.floor(Math.random() * questionLength)].id;
+  };
+  useEffect(() => {
+    setQuestionData(
+      QUESTIONS_DIFFICULTY_ARR.map((e: 'e' | 'm' | 'h') => ({
+        questionId: getRandomQuestionFromDifficulty(e),
+        score: 0,
+        status: `idle`,
+      })) as questionDataInterface[],
+    );
+  }, []);
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  const [expectedImage, setExpectedImage] = useState(`/img/blank.png`);
+  const [questionHtml, setPartialQuestionHtml] = useState(`<!-- View Only -->`);
+  const setQuestionHtml = (html: string) =>
+    setPartialQuestionHtml(`<!-- View Only -->\n${html}`);
+  const [userCss, setUserCss] = useState(``);
+  const [questionUsedPixels, setQuestionUsedPixels] = useState(0);
+
+  useEffect(() => {
+    const { image, defaultHtml, defaultCss, usedPixels } = questions[
+      currentQuestion
+    ];
+    setExpectedImage(`/img/${image}`);
+    setQuestionHtml(defaultHtml);
+    setUserCss(defaultCss);
+    setQuestionUsedPixels(usedPixels);
+  }, [currentQuestion]);
 
   // Convert User Div into Canvas
-  const userDiv = useRef(null);
-  const expectedImage = useRef(null);
+  const resultDiv = useRef(null);
   const resultImage = useRef(null);
-  useEffect(() => useDomToImage(userDiv.current, resultImage.current), [
-    userCss,
-  ]);
+  const [resultImageForCompare, setResultImageForCompare] = useState(``);
+  useEffect(() => {
+    domtoimage.toPng(resultDiv.current).then((dataUrl: string) => {
+      resultImage.current.src = dataUrl;
+    });
+    domtoimage
+      .toPng(resultDiv.current, { bgcolor: `#fff` })
+      .then((dataUrl: string) => {
+        setResultImageForCompare(dataUrl);
+      });
+  }, [userCss]);
 
-  // Diff
-  const DIMENSION = 500;
+  const createImageElement = (url: string): Promise<HTMLImageElement> =>
+    new Promise((resolveFn, rejectFn) => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => resolveFn(img);
+      img.onerror = () => rejectFn(img);
+    });
 
-  const TOTAL_PIXEL = DIMENSION * DIMENSION;
+  const generateCanvas = async (url: string) => {
+    const img = await createImageElement(url);
+    const canvas = document.createElement(`canvas`);
+    canvas.width = DIMENSION;
+    canvas.height = DIMENSION;
+    const canvasCtx = canvas.getContext(`2d`);
+    canvasCtx.drawImage(img, 0, 0);
+    return canvasCtx;
+  };
 
-  const roundTo2Decimals = (num) =>
+  const roundTo2Decimals = (num: number) =>
     Math.round((num + Number.EPSILON) * 100) / 100;
 
-  const diffImage = () => {
-    // Draw Expected
-    const expectedCanvas = document.createElement(`canvas`);
-    expectedCanvas.width = DIMENSION;
-    expectedCanvas.height = DIMENSION;
-    const expectedCanvasCtx = expectedCanvas.getContext(`2d`);
-    expectedCanvasCtx.drawImage(expectedImage.current, 0, 0);
-
-    // Draw User
-    const userCanvas = document.createElement(`canvas`);
-    userCanvas.width = DIMENSION;
-    userCanvas.height = DIMENSION;
-    const userCanvasCtx = userCanvas.getContext(`2d`);
-    userCanvasCtx.drawImage(resultImage.current, 0, 0);
-
-    // Diff
+  const diffImage = async () => {
+    const [expectedCanvas, resultCanvas] = await Promise.all([
+      generateCanvas(expectedImage),
+      generateCanvas(resultImageForCompare),
+    ]);
     const diffPixels = pixelmatch(
-      expectedCanvasCtx.getImageData(0, 0, DIMENSION, DIMENSION).data,
-      userCanvasCtx.getImageData(0, 0, DIMENSION, DIMENSION).data,
+      expectedCanvas.getImageData(0, 0, DIMENSION, DIMENSION).data,
+      resultCanvas.getImageData(0, 0, DIMENSION, DIMENSION).data,
       null,
       DIMENSION,
       DIMENSION,
-      { threshold: 0.1 },
+      { threshold: 0 },
     );
-    const samePercent = roundTo2Decimals(
-      100 - (diffPixels * 100) / TOTAL_PIXEL,
+    return roundTo2Decimals(
+      ((TOTAL_PIXEL - diffPixels) / questionUsedPixels) * 100,
     );
-    // eslint-disable-next-line no-console
-    console.log(`Same ${samePercent}%`);
+  };
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const onSubmitAnswer = async (isSkipped = false) => {
+    setIsSubmitting(true);
+    const changedStatusCurrentQuestion: questionDataInterface = {
+      ...questionData[currentQuestion],
+      status: isSkipped ? `skip` : `done`,
+      score: isSkipped ? 0 : await diffImage(),
+    };
+    setIsSubmitting(false);
+    const newQuestionData = questionData.map((question, index) =>
+      index === currentQuestion ? changedStatusCurrentQuestion : question,
+    );
+    setQuestionData(newQuestionData);
+    setCurrentQuestion((current) => {
+      if (current + 1 === QUESTIONS_LENGTH) {
+        console.log(
+          newQuestionData.reduce((total, { score }) => total + score, 0),
+        );
+        return current;
+      }
+      return current + 1;
+    });
   };
 
   return (
@@ -126,15 +174,11 @@ const Challenge: NextPage = () => {
         </Head>
         <main>
           <Timer isTimerPause={isTimerPause} maxTime={MAX_TIME} />
-          <Stepper data={EXAMPLE_STEP} />
+          <Stepper data={questionData} />
           <section css={EditorLayout}>
             <div css={[DisplaySection, ExpectedResultSection]}>
               <span>Expected Result</span>
-              <img
-                ref={expectedImage}
-                src="/img/blank.png"
-                alt="Expected result"
-              />
+              <img src={expectedImage} alt="Expected result" />
             </div>
             <div css={[DisplaySection, UserResultSection]}>
               <span>Your Result</span>
@@ -147,7 +191,7 @@ const Challenge: NextPage = () => {
               <div className="userDivContainer">
                 <div
                   className="userDivElement"
-                  ref={userDiv}
+                  ref={resultDiv}
                   // eslint-disable-next-line react/no-danger
                   dangerouslySetInnerHTML={{ __html: questionHtml }}
                 />
@@ -161,6 +205,7 @@ const Challenge: NextPage = () => {
                 theme="nord_dark"
                 name="htmlEditor"
                 defaultValue={questionHtml}
+                value={questionHtml}
                 width="300px"
                 readOnly
               />
@@ -172,18 +217,27 @@ const Challenge: NextPage = () => {
                 name="cssEditor"
                 width="500px"
                 defaultValue={userCss}
+                value={userCss}
                 onChange={setUserCss}
               />
             </section>
           </div>
           <section css={ActionSection}>
-            <button css={[baseButtonStyle, skipButtonStyle]} type="button">
+            <button
+              css={[baseButtonStyle, skipButtonStyle]}
+              type="button"
+              onClick={() => onSubmitAnswer(true)}
+            >
               Skip
             </button>
             <button
-              css={[baseButtonStyle, submitButtonStyle]}
+              css={[
+                baseButtonStyle,
+                submitButtonStyle,
+                isSubmitting && `loading`,
+              ]}
               type="button"
-              onClick={diffImage}
+              onClick={() => onSubmitAnswer()}
             >
               Submit
             </button>
