@@ -4,17 +4,22 @@ import { useEffect, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { jsx } from '@emotion/react';
-import { MainLayout } from '@/layouts/MainLayout';
 import dynamic from 'next/dynamic';
-import useDomToImage from '@/hooks/useDomToImage';
+import { useRouter } from 'next/router';
+import domtoimage from 'dom-to-image';
+import pixelmatch from 'pixelmatch';
+import { createNewScore } from '@/services/firebase';
+import questions from '@/data/questions';
+import { MainLayout } from '@/layouts/MainLayout';
 import Timer from '@/components/Timer';
-import Stepper, { StepperDataInterface } from '@/components/Stepper';
+import Stepper from '@/components/Stepper';
 import {
   baseButtonStyle,
   skipButtonStyle,
   submitButtonStyle,
 } from '@/components/button';
-import pixelmatch from 'pixelmatch';
+import { IStepper } from '@/types/IStepper';
+
 import {
   EditorLayout,
   ExpectedResultSection,
@@ -24,97 +29,186 @@ import {
   CssEditorSection,
   ActionSection,
   EditorContainer,
-} from '../../components/style-helper';
+} from '@/components/style-helper';
+
+interface IQuestionDataInterface extends IStepper {
+  score: number;
+}
+
+const DIMENSION = 500;
+const TOTAL_PIXEL = DIMENSION * DIMENSION;
+const isTimerPause = false;
+const MAX_TIME = 60 * 10;
+const QUESTIONS_DIFFICULTY_ARR = [`e`, `m`, `h`];
+const QUESTIONS_LENGTH = QUESTIONS_DIFFICULTY_ARR.length;
+
+function* getUniqFromArrayInternal<T>(arr: T[]) {
+  yield arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
+  if (arr.length) yield* getUniqFromArrayInternal(arr);
+}
+
+function* getUniqFromArray<T>(arr: T[]) {
+  // Fix from CasperX
+  yield* getUniqFromArrayInternal(Array.from(arr));
+}
 
 const Editor = dynamic(() => import(`@/components/Editor`), {
   ssr: false,
 });
 
 const sanitizeCss = (rawCssString: string) =>
-  // Algorithm
-  // 1. Make it a long string without newline
-  // 2. Split up '}'
-  // 3. Check if the string has a text or not
-  //    - If true: Append safe element to it
-  //    - If not: Do nothing
-  // 4. Join them up
   rawCssString
-    .split(`\n`)
-    .join(``)
+    .replace(/\n/g, ``)
+    .replace(/\s+/g, ` `)
     .split(`}`)
     .map((e) => (e.trim().length ? `.userDivElement>${e}` : e))
     .join(`}`)
     .replace(/url\(.*?\)/g, `url()`);
 
-// Timer
-const isTimerPause = false;
-const MAX_TIME = 60 * 10;
+const roundTo2Decimals = (num: number) =>
+  Math.round((num + Number.EPSILON) * 100) / 100;
 
-// Stepper
-const EXAMPLE_STEP: StepperDataInterface[] = [
-  { id: 1, status: `done` },
-  { id: 2, status: `skip` },
-  { id: 3, status: `done` },
-  { id: 4, status: `idle` },
-  { id: 5, status: `idle` },
-  { id: 6, status: `idle` },
-  { id: 7, status: `idle` },
-];
+const createImageElement = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolveFn, rejectFn) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => resolveFn(img);
+    img.onerror = () => rejectFn(img);
+  });
+
+const generateCanvas = async (url: string) => {
+  const img = await createImageElement(url);
+  const canvas = document.createElement(`canvas`);
+  canvas.width = DIMENSION;
+  canvas.height = DIMENSION;
+  const canvasCtx = canvas.getContext(`2d`);
+  canvasCtx.drawImage(img, 0, 0);
+  return canvasCtx;
+};
 
 const Challenge: NextPage = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [questionHtml, setQuestionHtml] = useState(
-    `<!-- view only -->\n<div class='question1'></div>`,
+  const router = useRouter();
+  const [questionData, setQuestionData] = useState<IQuestionDataInterface[]>(
+    [],
   );
-  const [userCss, setUserCss] = useState(
-    `.question1 {\n    /* Enter Your CSS Here */\n}`,
-  );
+  useEffect(() => {
+    setQuestionData(() => {
+      const questionGenerator = {
+        e: getUniqFromArray(
+          questions.filter(({ difficulty }) => difficulty === `e`),
+        ),
+        m: getUniqFromArray(
+          questions.filter(({ difficulty }) => difficulty === `m`),
+        ),
+        h: getUniqFromArray(
+          questions.filter(({ difficulty }) => difficulty === `h`),
+        ),
+      };
+
+      return QUESTIONS_DIFFICULTY_ARR.map(
+        (e: 'e' | 'm' | 'h'): IQuestionDataInterface => ({
+          questionId: questionGenerator[e].next().value.id,
+          score: 0,
+          status: `idle`,
+        }),
+      );
+    });
+  }, []);
+
+  // react hook
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [expectedImage, setExpectedImage] = useState(`/img/blank.png`);
+  const [questionHtml, setPartialQuestionHtml] = useState(`<!-- View Only -->`);
+  const [resultImageForCompare, setResultImageForCompare] = useState(``);
+  const [userCss, setUserCss] = useState(``);
+  const [questionUsedPixels, setQuestionUsedPixels] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const resultDiv = useRef(null);
+  const resultImage = useRef(null);
+
+  useEffect(() => {
+    const { image, defaultHtml, defaultCss, usedPixels } = questions[
+      currentQuestion
+    ];
+    setExpectedImage(`/img/${image}`);
+
+    setPartialQuestionHtml(`<!-- View Only -->\n${defaultHtml}`);
+    setUserCss(defaultCss);
+    setQuestionUsedPixels(usedPixels);
+  }, [currentQuestion]);
 
   // Convert User Div into Canvas
-  const userDiv = useRef(null);
-  const expectedImage = useRef(null);
-  const resultImage = useRef(null);
-  useEffect(() => useDomToImage(userDiv.current, resultImage.current), [
-    userCss,
-  ]);
 
-  // Diff
-  const DIMENSION = 500;
+  useEffect(() => {
+    domtoimage.toPng(resultDiv.current).then((dataUrl: string) => {
+      resultImage.current.src = dataUrl;
+    });
+    domtoimage
+      .toPng(resultDiv.current, { bgcolor: `#fff` })
+      .then((dataUrl: string) => {
+        setResultImageForCompare(dataUrl);
+      });
+  }, [userCss]);
 
-  const TOTAL_PIXEL = DIMENSION * DIMENSION;
-
-  const roundTo2Decimals = (num) =>
-    Math.round((num + Number.EPSILON) * 100) / 100;
-
-  const diffImage = () => {
-    // Draw Expected
-    const expectedCanvas = document.createElement(`canvas`);
-    expectedCanvas.width = DIMENSION;
-    expectedCanvas.height = DIMENSION;
-    const expectedCanvasCtx = expectedCanvas.getContext(`2d`);
-    expectedCanvasCtx.drawImage(expectedImage.current, 0, 0);
-
-    // Draw User
-    const userCanvas = document.createElement(`canvas`);
-    userCanvas.width = DIMENSION;
-    userCanvas.height = DIMENSION;
-    const userCanvasCtx = userCanvas.getContext(`2d`);
-    userCanvasCtx.drawImage(resultImage.current, 0, 0);
-
-    // Diff
+  const diffImage = async () => {
+    const [expectedCanvas, resultCanvas] = await Promise.all([
+      generateCanvas(expectedImage),
+      generateCanvas(resultImageForCompare),
+    ]);
     const diffPixels = pixelmatch(
-      expectedCanvasCtx.getImageData(0, 0, DIMENSION, DIMENSION).data,
-      userCanvasCtx.getImageData(0, 0, DIMENSION, DIMENSION).data,
+      expectedCanvas.getImageData(0, 0, DIMENSION, DIMENSION).data,
+      resultCanvas.getImageData(0, 0, DIMENSION, DIMENSION).data,
       null,
       DIMENSION,
       DIMENSION,
-      { threshold: 0.1 },
+      { threshold: 0 },
     );
-    const samePercent = roundTo2Decimals(
-      100 - (diffPixels * 100) / TOTAL_PIXEL,
+    return roundTo2Decimals(
+      ((TOTAL_PIXEL - diffPixels) / questionUsedPixels) * 100,
     );
-    // eslint-disable-next-line no-console
-    console.log(`Same ${samePercent}%`);
+  };
+
+  const onSubmitAnswer = async (isSkipped = false) => {
+    setIsSubmitting(true);
+
+    const changedStatusCurrentQuestion: IQuestionDataInterface = {
+      ...questionData[currentQuestion],
+      status: isSkipped ? `skip` : `done`,
+      score: isSkipped ? 0 : await diffImage(),
+    };
+
+    const newQuestionData = questionData.map((question, index) =>
+      index === currentQuestion ? changedStatusCurrentQuestion : question,
+    );
+
+    if (currentQuestion === QUESTIONS_LENGTH) {
+      const totalScore = newQuestionData.reduce(
+        (total, { score }) => total + score,
+        0,
+      );
+      const newScoreId = await createNewScore({
+        time: `11:30`,
+        score: totalScore,
+      });
+
+      router.push(`/summary/${newScoreId}`);
+      return;
+    }
+
+    setIsSubmitting(false);
+
+    setQuestionData(newQuestionData);
+    setCurrentQuestion((current) => {
+      if (current + 1 === QUESTIONS_LENGTH) {
+        // eslint-disable-next-line no-console
+        console.log(
+          newQuestionData.reduce((total, { score }) => total + score, 0),
+        );
+        // return current;
+      }
+      return current + 1;
+    });
   };
 
   return (
@@ -126,15 +220,11 @@ const Challenge: NextPage = () => {
         </Head>
         <main>
           <Timer isTimerPause={isTimerPause} maxTime={MAX_TIME} />
-          <Stepper data={EXAMPLE_STEP} />
+          <Stepper data={questionData} />
           <section css={EditorLayout}>
             <div css={[DisplaySection, ExpectedResultSection]}>
               <span>Expected Result</span>
-              <img
-                ref={expectedImage}
-                src="/img/blank.png"
-                alt="Expected result"
-              />
+              <img src={expectedImage} alt="Expected result" />
             </div>
             <div css={[DisplaySection, UserResultSection]}>
               <span>Your Result</span>
@@ -147,7 +237,7 @@ const Challenge: NextPage = () => {
               <div className="userDivContainer">
                 <div
                   className="userDivElement"
-                  ref={userDiv}
+                  ref={resultDiv}
                   // eslint-disable-next-line react/no-danger
                   dangerouslySetInnerHTML={{ __html: questionHtml }}
                 />
@@ -161,6 +251,7 @@ const Challenge: NextPage = () => {
                 theme="nord_dark"
                 name="htmlEditor"
                 defaultValue={questionHtml}
+                value={questionHtml}
                 width="300px"
                 readOnly
               />
@@ -172,18 +263,27 @@ const Challenge: NextPage = () => {
                 name="cssEditor"
                 width="500px"
                 defaultValue={userCss}
+                value={userCss}
                 onChange={setUserCss}
               />
             </section>
           </div>
           <section css={ActionSection}>
-            <button css={[baseButtonStyle, skipButtonStyle]} type="button">
+            <button
+              css={[baseButtonStyle, skipButtonStyle]}
+              type="button"
+              onClick={() => onSubmitAnswer(true)}
+            >
               Skip
             </button>
             <button
-              css={[baseButtonStyle, submitButtonStyle]}
+              css={[
+                baseButtonStyle,
+                submitButtonStyle,
+                isSubmitting && `loading`,
+              ]}
               type="button"
-              onClick={diffImage}
+              onClick={() => onSubmitAnswer()}
             >
               Submit
             </button>

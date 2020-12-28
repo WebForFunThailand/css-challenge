@@ -57,6 +57,7 @@ export const UserResultSection = css`
       width: 500px;
       height: 500px;
       background: #f1f1f1;
+      overflow: hidden;
       display: inline-block;
     }
   }
