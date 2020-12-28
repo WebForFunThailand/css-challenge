@@ -1,5 +1,5 @@
 interface Question {
-  id: number;
+  id: string;
   difficulty: 'e' | 'm' | 'h';
   image: string;
   defaultHtml: string;
@@ -9,12 +9,28 @@ interface Question {
 
 const questions: Question[] = [
   {
-    id: 0,
+    id: `debug-easy`,
     difficulty: `e`,
     image: `q0.png`,
-    defaultHtml: `<!-- View Only -->\n<div class='debug-question'></div>`,
+    defaultHtml: `<div class='debug-question'></div>`,
     defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
-    usedPixels: 0,
+    usedPixels: 50000,
+  },
+  {
+    id: `debug-medium`,
+    difficulty: `m`,
+    image: `q0.png`,
+    defaultHtml: `<div class='debug-question'></div>`,
+    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    usedPixels: 50000,
+  },
+  {
+    id: `debug-hard`,
+    difficulty: `h`,
+    image: `q0.png`,
+    defaultHtml: `<div class='debug-question'></div>`,
+    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    usedPixels: 50000,
   },
 ];
 

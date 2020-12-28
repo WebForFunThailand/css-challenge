@@ -10,6 +10,7 @@ interface EditorProps {
   mode: 'html' | 'css';
   name: string;
   defaultValue?: string;
+  value?: string;
   readOnly?: boolean;
   onChange?: (value: string, event?: any) => void;
   width: string;
@@ -22,11 +23,12 @@ const Editor: FunctionComponent<EditorProps> = ({
   onChange,
   readOnly,
   defaultValue,
+  value,
   width,
   theme,
 }) => (
   <AceEditor
-    {...{ mode, name, onChange, readOnly, defaultValue }}
+    {...{ mode, name, onChange, readOnly, defaultValue, value }}
     theme={theme}
     fontSize={16}
     showPrintMargin
