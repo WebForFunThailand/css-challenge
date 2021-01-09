@@ -7,7 +7,6 @@ import { jsx } from '@emotion/react';
 import { MainLayout } from '@/layouts/MainLayout';
 import dynamic from 'next/dynamic';
 import domtoimage from 'dom-to-image';
-import pixelmatch from 'pixelmatch';
 import {
   EditorLayout,
   ExpectedResultSection,
@@ -27,7 +26,7 @@ const sanitizeCss = (rawCssString: string) =>
     .split(`\n`)
     .join(``)
     .split(`}`)
-    .map((e) => (e.trim().length ? `.userDivElement>${e}` : e))
+    .map((e) => (e.trim().length ? `.userDivElement ${e}` : e))
     .join(`}`)
     .replace(/url\(.*?\)/g, `url()`);
 
@@ -60,49 +59,11 @@ const Challenge: NextPage = () => {
   const expectedImage = useRef(null);
   const resultImage = useRef(null);
 
-  // Diff
-  const DIMENSION = 500;
-
-  const generateCanvas = (ref: HTMLImageElement) => {
-    const canvas = document.createElement(`canvas`);
-    canvas.width = DIMENSION;
-    canvas.height = DIMENSION;
-    const canvasCtx = canvas.getContext(`2d`);
-    canvasCtx.drawImage(ref, 0, 0);
-    return canvasCtx;
-  };
-
-  const [diffPixels, setDiffPixels] = useState(0);
-
-  const diffImage = (resultImageForCompareImage) => {
-    // Diff
-    const diffPx = pixelmatch(
-      generateCanvas(expectedImage.current).getImageData(
-        0,
-        0,
-        DIMENSION,
-        DIMENSION,
-      ).data,
-      generateCanvas(resultImageForCompareImage).getImageData(
-        0,
-        0,
-        DIMENSION,
-        DIMENSION,
-      ).data,
-      null,
-      DIMENSION,
-      DIMENSION,
-      { threshold: 0 },
-    );
-    setDiffPixels(diffPx);
-  };
-
   useEffect(() => {
     domtoimage.toPng(userDiv.current).then((dataUrl) => {
       resultImage.current.src = dataUrl;
       const resultImageForCompareImage = new Image();
       resultImageForCompareImage.src = dataUrl;
-      setTimeout(() => diffImage(resultImageForCompareImage), 100);
     });
   }, [userCss]);
 
@@ -156,8 +117,7 @@ const Challenge: NextPage = () => {
                   {`{`}
                   id: `{questionId}`, difficulty: `{questionDifficulty}`, image:
                   `{questionId}.png`, defaultHtml: `{formatHtml(questionHtml)}`,
-                  defaultCss: `{formatCss(userCss)}`, usedPixels: {diffPixels},
-                  {`}`},
+                  defaultCss: `{formatCss(userCss)}`{`}`},
                 </code>
               </div>
             </div>

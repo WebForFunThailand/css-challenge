@@ -39,7 +39,23 @@ const DIMENSION = 500;
 const TOTAL_PIXEL = DIMENSION * DIMENSION;
 const isTimerPause = false;
 const MAX_TIME = 60 * 10;
-const QUESTIONS_DIFFICULTY_ARR = [`e`, `m`, `h`];
+// const QUESTIONS_DIFFICULTY_ARR = [
+//   `e`,
+//   `e`,
+//   `e`,
+//   `e`,
+//   `e`,
+//   `m`,
+//   `m`,
+//   `m`,
+//   `m`,
+//   `m`,
+//   `h`,
+//   `h`,
+//   `h`,
+//   `h`,
+// ];
+const QUESTIONS_DIFFICULTY_ARR = [`e`, `e`, `e`, `m`, `m`, `h`, `h`];
 const QUESTIONS_LENGTH = QUESTIONS_DIFFICULTY_ARR.length;
 
 function* getUniqFromArrayInternal<T>(arr: T[]) {
@@ -61,7 +77,7 @@ const sanitizeCss = (rawCssString: string) =>
     .replace(/\n/g, ``)
     .replace(/\s+/g, ` `)
     .split(`}`)
-    .map((e) => (e.trim().length ? `.userDivElement>${e}` : e))
+    .map((e) => (e.trim().length ? `.userDivElement ${e}` : e))
     .join(`}`)
     .replace(/url\(.*?\)/g, `url()`);
 
@@ -89,10 +105,7 @@ const generateCanvas = async (url: string) => {
 const Challenge: NextPage = () => {
   const router = useRouter();
   const [questionData, setQuestionData] = useState<IQuestionDataInterface[]>(
-    [],
-  );
-  useEffect(() => {
-    setQuestionData(() => {
+    (() => {
       const questionGenerator = {
         e: getUniqFromArray(
           questions.filter(({ difficulty }) => difficulty === `e`),
@@ -106,14 +119,14 @@ const Challenge: NextPage = () => {
       };
 
       return QUESTIONS_DIFFICULTY_ARR.map(
-        (e: 'e' | 'm' | 'h'): IQuestionDataInterface => ({
-          questionId: questionGenerator[e].next().value.id,
+        (difficulty: 'e' | 'm' | 'h'): IQuestionDataInterface => ({
+          questionId: questionGenerator[difficulty].next().value.id,
           score: 0,
           status: `idle`,
         }),
       );
-    });
-  }, []);
+    })(),
+  );
 
   // react hook
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -126,7 +139,9 @@ const Challenge: NextPage = () => {
   const resultImage = useRef(null);
 
   useEffect(() => {
-    const { image, defaultHtml, defaultCss } = questions[currentQuestion];
+    const { image, defaultHtml, defaultCss } = questions.find(
+      ({ id }) => id === questionData[currentQuestion].questionId,
+    );
     setExpectedImage(`/img/${image}`);
 
     setPartialQuestionHtml(`<!-- View Only -->\n${defaultHtml}`);
@@ -164,6 +179,8 @@ const Challenge: NextPage = () => {
       status: isSkipped ? `skip` : `done`,
       score: isSkipped ? 0 : await diffImage(),
     };
+
+    console.log(changedStatusCurrentQuestion.score);
 
     const newQuestionData = questionData.map((question, index) =>
       index === currentQuestion ? changedStatusCurrentQuestion : question,
