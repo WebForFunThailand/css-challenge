@@ -119,42 +119,31 @@ const Challenge: NextPage = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [expectedImage, setExpectedImage] = useState(`/img/blank.png`);
   const [questionHtml, setPartialQuestionHtml] = useState(`<!-- View Only -->`);
-  const [resultImageForCompare, setResultImageForCompare] = useState(``);
   const [userCss, setUserCss] = useState(``);
-  const [questionUsedPixels, setQuestionUsedPixels] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resultDiv = useRef(null);
   const resultImage = useRef(null);
 
   useEffect(() => {
-    const { image, defaultHtml, defaultCss, usedPixels } = questions[
-      currentQuestion
-    ];
+    const { image, defaultHtml, defaultCss } = questions[currentQuestion];
     setExpectedImage(`/img/${image}`);
 
     setPartialQuestionHtml(`<!-- View Only -->\n${defaultHtml}`);
     setUserCss(defaultCss);
-    setQuestionUsedPixels(usedPixels);
   }, [currentQuestion]);
 
   // Convert User Div into Canvas
-
   useEffect(() => {
     domtoimage.toPng(resultDiv.current).then((dataUrl: string) => {
       resultImage.current.src = dataUrl;
     });
-    domtoimage
-      .toPng(resultDiv.current, { bgcolor: `#fff` })
-      .then((dataUrl: string) => {
-        setResultImageForCompare(dataUrl);
-      });
   }, [userCss]);
 
   const diffImage = async () => {
     const [expectedCanvas, resultCanvas] = await Promise.all([
       generateCanvas(expectedImage),
-      generateCanvas(resultImageForCompare),
+      generateCanvas(resultImage.current.src),
     ]);
     const diffPixels = pixelmatch(
       expectedCanvas.getImageData(0, 0, DIMENSION, DIMENSION).data,
@@ -164,9 +153,7 @@ const Challenge: NextPage = () => {
       DIMENSION,
       { threshold: 0 },
     );
-    return roundTo2Decimals(
-      ((TOTAL_PIXEL - diffPixels) / questionUsedPixels) * 100,
-    );
+    return roundTo2Decimals(((TOTAL_PIXEL - diffPixels) * 100) / TOTAL_PIXEL);
   };
 
   const onSubmitAnswer = async (isSkipped = false) => {

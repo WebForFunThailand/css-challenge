@@ -21,7 +21,7 @@ const questions: Question[] = [
     difficulty: `e`,
     image: `q1.png`,
     defaultHtml: `<div class='debug-question2'></div>`,
-    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    defaultCss: `.debug-question2 {\n    /* Enter Your CSS Here */\n}`,
     usedPixels: 50000,
   },
   {
@@ -37,7 +37,7 @@ const questions: Question[] = [
     difficulty: `m`,
     image: `q1.png`,
     defaultHtml: `<div class='debug-question2'></div>`,
-    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    defaultCss: `.debug-question2 {\n    /* Enter Your CSS Here */\n}`,
     usedPixels: 50000,
   },
   {
@@ -53,7 +53,7 @@ const questions: Question[] = [
     difficulty: `h`,
     image: `q1.png`,
     defaultHtml: `<div class='debug-question2'></div>`,
-    defaultCss: `.debug-question {\n    /* Enter Your CSS Here */\n}`,
+    defaultCss: `.debug-question2 {\n    /* Enter Your CSS Here */\n}`,
     usedPixels: 50000,
   },
 ];
